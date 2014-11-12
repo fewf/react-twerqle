@@ -1,0 +1,12 @@
+#boardContainer {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left:0;
+    width:0;
+}
+#boardContainer #boardControls {
+    position: fixed;
+    left: 10;
+    up: 10;
+}            

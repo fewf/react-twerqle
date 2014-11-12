@@ -1,0 +1,11 @@
+.playerControls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+.playerControls p, .playerControls ul, .playerControls div {
+    background-color: gray;
+}
+.playerControls.active p, .playerControls.active ul, .playerControls.active div {
+    background-color: teal;
+}
