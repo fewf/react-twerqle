@@ -1,0 +1,4 @@
+<svg version="1.1" width="32px" height="32px">
+<path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="3px" fill="none" d="M5,12 A5,3 0 0,1 27,12 m1,-4 l-1,4 l-4,-1"/>
+<path transform="rotate(180,16,16)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="3px" fill="none" d="M5,12 A5,3 0 0,1 27,12 m1,-4 l-1,4 l-4,-1"/>
+</svg>

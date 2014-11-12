@@ -33,22 +33,24 @@ var BoardSVG = React.createClass({
     render: function() {
         var tilePlacements = this.props.tilePlacements.map(function(tp) {
             return (
-                    <TilePlacement key={String(tp.tile) + tp.coords.x + tp.coords.y}
-                                   tilePlacement={tp}
-                                   cellSize={this.props.cellSize}
-                                   maxDimensions={this.state.maxDimensions} />
+                    <TilePlacement 
+                        key={String(tp.tile) + tp.coords.x + tp.coords.y}
+                        tilePlacement={tp}
+                        cellSize={this.props.cellSize}
+                        maxDimensions={this.state.maxDimensions} />
                 );
         }, this);
 
         var playableCoords = this.props.playableCoords.map(function(pc) {
             return (
-                    <PlayableCoord key={String(pc.x) + pc.y}
-                                   coords={pc}
-                                   cellSize={this.props.cellSize} 
-                                   maxDimensions={this.state.maxDimensions}
-                                   playableCoordClick={this.props.playableCoordClick}
-                                   playableCoordDragEnter={this.props.playableCoordDragEnter}
-                                   playableCoordDragLeave={this.props.playableCoordDragLeave} />
+                    <PlayableCoord 
+                        key={String(pc.x) + pc.y}
+                        coords={pc}
+                        cellSize={this.props.cellSize} 
+                        maxDimensions={this.state.maxDimensions}
+                        playableCoordClick={this.props.playableCoordClick}
+                        playableCoordDragEnter={this.props.playableCoordDragEnter}
+                        playableCoordDragLeave={this.props.playableCoordDragLeave} />
                 )
         }, this);
 

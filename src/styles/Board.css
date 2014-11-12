@@ -7,6 +7,6 @@
 }
 #boardContainer #boardControls {
     position: fixed;
-    left: 10;
-    up: 10;
+    left: 95%;
+    top:  95%;
 }            

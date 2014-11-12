@@ -18,21 +18,23 @@ var ComputerIcons = React.createClass({
                 <text textAnchor="middle" x="56" y="12">
                     {text}
                 </text>
-                {this.generateComputerIcon(0)}
+                <g transform="translate(0 18)">
+                    <polygon points="0,30 4,22 28,22 32,30  "/>
+                    <path d="M4,2v18h24V2H4z M26,18H6V4h20V18z"/>
+                </g>
                 {this.generateComputerIcon(1)}
                 {this.generateComputerIcon(2)}
             </svg>
         );
     },
     generateComputerIcon: function(num) {
-        // if (num === 2 && this.props.numOpponents === 1) return;
 
         var isActivated = this.props.numOpponents > num;
         var translate = (38 * num) + " 18";
 
         var plusOrEx = (
             <polygon
-                fill={num === 0 ? "none" : isActivated ? "red" : "black"}
+                fill={isActivated ? "red" : "black"}
                 transform={isActivated ? "" : "rotate(45 23 23)"}
                 points="19,25 21,27 23,25 25,27 27,25 25,23 27,21 25,19 23,21 21,19 19,21 21,23  "/>
         )
@@ -42,7 +44,6 @@ var ComputerIcons = React.createClass({
                     {plusOrEx}
                     <circle className="computer-icon-selector" 
                             onClick={isActivated ? this.props.removeBot : this.props.addBot}
-                            fill={num === 0 ? "none" : "white"}
                             opacity="0" stroke="none" r="9" cx="23" cy="23" />
                 </g>
         )          

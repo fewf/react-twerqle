@@ -1,7 +1,7 @@
 #nav-bar{
     position: fixed;
     top: 0;
-    width: 100%;
+    /*width: 100%;*/
     height: 100px;
     z-index: 100;
     border-bottom: 2px solid black;
@@ -9,10 +9,11 @@
     /*padding: em;*/
 }
 #nav-bar > * {
+    margin: 0 1em;
     float: left;
 }
 #nav-bar h1 {
     font: bold 54px monospace;
 
-    margin: 25px;    
+    /*vertical-align: middle;*/
 }

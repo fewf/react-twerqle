@@ -2,10 +2,39 @@
     position: fixed;
     bottom: 0;
     left: 0;
+    height: 100px;
+    z-index: 100;
+    border-top: 2px solid black;
+    background-color: pink;  
+    width: 30%;  
 }
-.playerControls p, .playerControls ul, .playerControls div {
-    background-color: gray;
+.player-buttons {
+	float:right;
+	clear:both;
 }
-.playerControls.active p, .playerControls.active ul, .playerControls.active div {
-    background-color: teal;
+.player-buttons p {
+	display:inline-block;
+	width: 200px;
+}
+.player-buttons a svg circle {
+	fill: lightgreen;
+	cursor: pointer;
+}
+.player-buttons a:hover svg circle {
+	fill: green;
+}
+.player-buttons a:active svg circle {
+	fill: yellow;
+}
+ul#rack {
+	display: block;
+	margin: 0 auto 5px;
+	background-color: rgba(255,255,255,.8);
+	border-radius: 3px;
+	width: 88%;
+	height: 60px;
+}
+
+ul#rack li {
+	cursor: move;
 }

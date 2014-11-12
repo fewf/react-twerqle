@@ -292,7 +292,10 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
         if (this.bag.length) return false;
 
         // is there any player without tiles left?
-        return this.players.filter(function(player) { return !player.tiles.length; }).length;
+        return !this.turnHistory.length && 
+                this.players.filter(function(player) { 
+                    return !player.tiles.length;
+                }).length;
     }
     state.scoreTurn = function(moveLines) {
         var outer = this;

@@ -24,8 +24,8 @@ exports.playTurn = function(state) {
 exports.startGame = function(numBots, numTypes, numCopies) {
     // game defaults:
     if (typeof numBots === 'undefined') numBots = 1;
-    if (typeof numTypes === 'undefined') numTypes = 6;
-    if (typeof numCopies === 'undefined') numCopies = 3;
+    if (typeof numTypes === 'undefined') numTypes = 4;
+    if (typeof numCopies === 'undefined') numCopies = 1;
 
     var playerNames = _.range(numBots + 1).map(function(x) { return 'player ' + (x + 1); });
     // var playerNames = _.range(numBots).map(function(x) { return 'player ' + (x + 1); });
@@ -33,7 +33,7 @@ exports.startGame = function(numBots, numTypes, numCopies) {
     var playerTypes = [0].concat(_.range(numBots).map(function() { return 10; }));
 
 
-    return State.initState(playerNames, playerTypes, numTypes, numCopies);
+    return State.initState(playerNames, playerTypes, 4, 1);
 }
 
 

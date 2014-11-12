@@ -26,23 +26,23 @@ var UIRoot = React.createClass({
                 }
     },
     render: function() {
+        var game;
+        if (this.state.game) {
+            game = (<Game game={this.state.game} handleGameEnd={this.handleGameEnd} />);
+        }
+
         return (
             <div id="UIRoot">
-                <NavBar game={this.state.game} />
-                <Game game={this.state.game} handleGameEnd={this.handleGameEnd} />
+                <NavBar game={this.state.game} handleGameStart={this.handleGameStart} />
+                {game}
             </div>
         )
-        // if (this.state.game) {
-        //     return <Game game={this.state.game} handleGameEnd={this.handleGameEnd} />;
-        // } else {
-        //     return <GameGenerator handleGameStart={this.handleGameStart} />;
-        // }
     },
     handleGameStart: function(game) {
         this.setState({game: game});
     },
     handleGameEnd: function(game) {
-        this.setState({game: null});
+        this.setState({game: "over"});
     }
 });
 

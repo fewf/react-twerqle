@@ -8,37 +8,31 @@ var React = require('react/addons');
 var Board = require('./Board');
 var adaptor = require('../twerqle/adaptor');
 var PlayerControls = require('./PlayerControls');
+var GameDataView = require('./GameDataView');
 require('../../styles/Game.css');
 
 var Game = React.createClass({
     getInitialState: function() {
-        return { 
+        return {
                 game: this.props.game,
+                gameOver: false,
                 selectedTile: null,
                 exchangeTiles: null
                 }
     },
     render: function() {
-        var game = this.props.game;
-
-        if (!game) {
-            return (
-                <div id="game-root">
-                    <Board 
-                        tilePlacements={[]} 
-                        playableCoords={[]} 
-                        playableCoordDragEnter={this.playableCoordDragEnter}
-                        playableCoordDragLeave={this.playableCoordDragLeave}
-                        playableCoordClick={this.playableCoordClick} />
-                </div>
-            )
-        }
+        var game = this.state.game;
 
         var tilePlacements = game.tilePlacements();
-        var playableCoords = game.playable();
+        var playableCoords = game.gameOver() ? [] : game.playable();
 
+        var humanPlayer = game.players.filter(function(pl) {return !this.type})[0];
+        
         return (
             <div id="game-root">
+                
+                <GameDataView game={this.state.game} />
+
                 <Board 
                     tilePlacements={tilePlacements} 
                     playableCoords={playableCoords} 
@@ -46,8 +40,7 @@ var Game = React.createClass({
                     playableCoordDragLeave={this.playableCoordDragLeave}
                     playableCoordClick={this.playableCoordClick} />
                 <PlayerControls 
-                    player={game.getCurrentPlayer()}
-                    activePlayer={true}
+                    player={humanPlayer}
                     turnHistory={this.state.game.turnHistory}
                     selectedTile={this.state.selectedTile}
                     exchangeTiles={this.state.exchangeTiles}
@@ -106,6 +99,7 @@ var Game = React.createClass({
             }
             this.computerPlay();
         } else {
+            this.handleTurnReset();
             this.setState({exchangeTiles: []});
         }
     },
@@ -138,8 +132,9 @@ var Game = React.createClass({
     routeGame: function() {
         adaptor.saveGameState(this.state.game);
         if (this.state.game.gameOver()) {
-            console.log('game over!');
-            this.props.handleGameEnd();
+            console.log('game over');
+            delete localStorage["twerqle.game.in.progress"];
+            this.setState({gameOver: true});
         } else if (this.state.game.getCurrentPlayer().type) {
             this.computerPlay();
         }
@@ -161,6 +156,9 @@ var Game = React.createClass({
     },        
     componentDidMount: function() {
         if (this.state.game) this.routeGame();
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({game: nextProps.game});
     }
 });
 

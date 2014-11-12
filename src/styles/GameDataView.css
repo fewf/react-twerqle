@@ -1,3 +1,13 @@
-.GameDataView{
-  border: 1px dashed #f00;
+#game-data-view{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 100px;
+    z-index: 100;
+    border-top: 2px solid black;
+    background-color: orange;
+}
+#game-data-view > * {
+    margin: 0 1em;
+    float: left;
 }
