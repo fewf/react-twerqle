@@ -26,7 +26,7 @@ var Game = React.createClass({
         var tilePlacements = game.tilePlacements();
         var playableCoords = game.gameOver() ? [] : game.playable();
 
-        var humanPlayer = game.players.filter(function(pl) {return !this.type})[0];
+        var humanPlayer = game.players.filter(function(pl) {return !pl.type})[0];
         
         return (
             <div id="game-root">
@@ -140,21 +140,23 @@ var Game = React.createClass({
         }
     },
     computerPlay: function(playSpeed) {
-        if (typeof playSpeed == "undefined") {
-            playSpeed = 500;
+        if (!playSpeed) {
+            playSpeed = 1000;
         }
 
-        if (this.state.game.getCurrentPlayer().type) {
-            app.twq.playTurn(app.game);
 
-            this.setState({game: app.game, selectedTile: null, exchangeTiles: null});
-        }
         var that = this;
         window.setTimeout(function() {
-            that.routeGame(playSpeed);
+            app.twq.playTurn(app.game);
+
+            that.setState({game: app.game, selectedTile: null, exchangeTiles: null});            
+            // that.routeGame();
         }, playSpeed);
     },        
     componentDidMount: function() {
+        if (this.state.game) this.routeGame();
+    },
+    componentDidUpdate: function() {
         if (this.state.game) this.routeGame();
     },
     componentWillReceiveProps: function(nextProps) {
