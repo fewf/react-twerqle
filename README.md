@@ -10,6 +10,10 @@ Navigating the Code
 
 I used [https://github.com/newtriks/generator-react-webpack](react-webpack), a Yeoman generator, to enforce structure on the code. It comes bundled with handy Grunt commands. Cloning and running `grunt serve` will spin up a server on your local machine, `grunt build` bundles it up into `/dist` for web consumption
 
-**src/components** is where to find the React user interface code.
+**src/components** is where to find the React user interface code.'
+
+This contains the "entry point" to the application, which is main.jsx.
 
 **src/twerqle** contains the game logic.
+
+adaptor.js is a small amount of glue between the game logic and user interface.
