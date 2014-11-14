@@ -1,7 +1,0 @@
-/usr/bin/yo -> /usr/lib/node_modules/yo/cli.js
-
-> yo@1.1.2 postinstall /usr/lib/node_modules/yo
-> node ./scripts/doctor
-
-[Yeoman Doctor] Everything looks alright!
-
