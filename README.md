@@ -1,9 +1,9 @@
 Twerqle, in ReactJS
 =============
 
-This is an adaptation of board game [http://en.wikipedia.org/wiki/Qwirkle](Qwirkle). The ReactJS user interface is a work-in-progress. All graphics are made using `SVG`. `localStorage` powers state saving, so a user doesn't have to finish a game in one sitting. 
+This is an adaptation of the board game [Qwirkle](http://en.wikipedia.org/wiki/Qwirkle). The ReactJS user interface is a work-in-progress. All graphics are made using `SVG`. `localStorage` powers state saving, so a user doesn't have to finish a game in one sitting. 
 
-Play it on it's [http://fewf.github.io/react-twerqle/](github page!)
+Play it on it's [github page!](http://fewf.github.io/react-twerqle/)
 
 Navigating the Code
 -------------------
@@ -12,4 +12,4 @@ I used [https://github.com/newtriks/generator-react-webpack](react-webpack), a Y
 
 **src/components** is where to find the React user interface code.
 
-**src/twerqle** contains the game logic. 
+**src/twerqle** contains the game logic.

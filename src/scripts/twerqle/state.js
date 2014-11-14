@@ -1,7 +1,6 @@
 var _ = require('underscore');
 var Player = require('./player');
 var Board = require('./board');
-// var Combs = require('./combinatorics').Combinatorics;
 
 exports.sum = function(nums) {
     var sum = 0;
@@ -280,13 +279,15 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
     }
 
     state.scoreLine = function(line) {
-        // below logic works on all but the very first play. handling in place in scoreturn for first play.
+        // below logic works on all but the very first play. 
+        // handling in place in scoreturn for first play.
         if (line.length === 1) return 0;
 
         if (line.length === this.numTypes) return this.numTypes * 2;
 
         return line.length;
     }
+
     state.gameOver = function() {
         // game can't be over if there are still tiles in the bag
         if (this.bag.length) return false;
@@ -297,10 +298,10 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
                     return !player.tiles.length;
                 }).length;
     }
+
     state.scoreTurn = function(moveLines) {
         var outer = this;
         var score = 0;
-        // var th = this.turnHistory;
 
         if (!this.turnHistory.length) return false;
 
@@ -320,6 +321,8 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
     state.resetTurn = function () {
         var player = this.getCurrentPlayer();
 
+        // pop each tilePlacement off turn history
+        // and return placed tile to player
         while (this.turnHistory.length) {
             player.tiles.push(this.turnHistory.pop().tile);
         }
@@ -327,6 +330,9 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
     }
 
     state.determineWinner = function() {
+        // loop through players and find player(s) with the
+        // highest score
+
         var winningScore = -1;
         for (var i = this.players.length - 1; i >= 0; i--) {
             if (this.players[i].score > winningScore) {
@@ -385,44 +391,12 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
         return true;
     }
 
-    function recurse_optimize_score(rackLines, playables, acc) {
-        var tile;
-
-        for (var i = 0; i < playables.length; i++) {
-
-            for (var j = 0; j < rackLines.length; j++) {
-
-                for (var k = 0; k < rackLines[j].length; k++) {
-                    tile = rackLines[j][k];
-
-                    if (outer.tilePlace(playables[i], tile)) {
-                        recurse_optimize_score(rack.slice(0,j).concat(rack.slice(j + 1)), avoid_twerqle_bait);
-                        if (killswitch) {
-                            outer.turnHistory = [];
-                            return;
-                        }
-                    }
-                    
-                }
-            };
-        };
-        if (outer.turnHistory.length) {
-            var hash = JSON.stringify(outer.turnHistory);
-            var score = outer.scoreTurn();
-            var score_value = avoid_twerqle_bait && 
-                                outer.moveLines().filter(function(line) { return line.length === outer.numTypes - 1; }).length ? score - 2 : score;
-            scores[hash] = score_value;
-            outer.undoTilePlace();
-
-            if (score > numTypes * 2 + 1) killswitch = true;
-        }
-    }
-
     state.computerPlay = function(avoid_twerqle_bait) {
 
         var outer = this;
         var plyr = this.getCurrentPlayer();
 
+        // first turn play for computers. get longest line and play it.
         if (this.isInitialState()) {
             var coords, move = [];
             var line = plyr.getLongestLine(this);
@@ -433,21 +407,47 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
             return ['play', move];
         }
 
-        // get all lines within players hand
-        var lines = plyr.getAllLinesInRack(this);
 
         // recurse_optimize_scores will populate the scores object
         var scores = {};
-        // killswitch var set to stop execution of move-finding function
-        // if a high enough scoring move is found.
-        var killswitch = false;
 
+        function recurse_optimize_score(rack) {
+
+            var playables = outer.playable();
+            // for each playable coordinate ... 
+            for (var i = 0; i < playables.length; i++) {
+                // for each tile in the current looked-at line...
+                for (var j = rack.length - 1; j >= 0; j--) {
+
+                    tile = rack[j];
+                    // attempt to place tile at playable coordinate...
+                    if (outer.tilePlace(playables[i], tile)) {
+                        // if it succeeds, recurse back into this function with the
+                        // placed tile removed from the rack
+                        recurse_optimize_score(rack.slice(0,j).concat(rack.slice(j + 1)));
+
+                    }
+                };
+            };
+            if (outer.turnHistory.length) {
+                var hash = JSON.stringify(outer.turnHistory);
+                var score = outer.scoreTurn();
+                // place turnHistory and score into scores dictionary.
+                scores[hash] = score;
+                outer.undoTilePlace();
+            }
+        }
+
+
+        // get all lines within player's hand
+        var lines = plyr.getAllLinesInRack(this);
+
+        // find moves for each of those lines
         for (var i = lines.length - 1; i >= 0; i--) {
             recurse_optimize_score(lines[i], avoid_twerqle_bait);
-            // just-in-case turn resetter
-            this.resetTurn();
         };
 
+        // loop through scores and find highest scores
         var highest = 0; 
         var options = []; 
         for (move in scores) {
@@ -459,11 +459,14 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
             }
         }
 
+
         if (highest) {
+            // choose random highest scoring move of options
             var index = Math.floor(Math.random() * options.length);
             var movesJSON = JSON.parse(options[index]);
             var moves = [];
             for (var i = 0; i < movesJSON.length; i++) {
+                // place tiles
                 moves.push(new Board.TilePlacement(
                                 new Board.Coordinates(movesJSON[i].coords.x, movesJSON[i].coords.y), 
                                 movesJSON[i].tile)
@@ -473,6 +476,9 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
             return ["play", moves];
 
         } else {
+            // if highest is 0, then no moves were found by computer
+            // exchange all tiles but those that make the
+            // longest line in player's rack
             var longestLine = plyr.getLongestLine(this);
             var rack = plyr.tiles.slice(0);
             for (var i = 0; i < longestLine.length; i++) {
@@ -482,34 +488,7 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
             return ["exchange", rack];
         }
 
-        function recurse_optimize_score(rack, avoid_twerqle_bait) {
-            var row, col, tile;
-            var playables = outer.playable();
-            for (var i = 0; i < playables.length; i++) {
 
-                for (var j = rack.length - 1; j >= 0; j--) {
-
-                    tile = rack[j];
-                    if (outer.tilePlace(playables[i], tile)) {
-                        recurse_optimize_score(rack.slice(0,j).concat(rack.slice(j + 1)), avoid_twerqle_bait);
-                        if (killswitch) {
-                            outer.turnHistory = [];
-                            return;
-                        }
-                    }
-                };
-            };
-            if (outer.turnHistory.length) {
-                var hash = JSON.stringify(outer.turnHistory);
-                var score = outer.scoreTurn();
-                var score_value = avoid_twerqle_bait && 
-                                    outer.moveLines().filter(function(line) { return line.length === outer.numTypes - 1; }).length ? score - 2 : score;
-                scores[hash] = score_value;
-                outer.undoTilePlace();
-
-                if (score > numTypes * 2 + 1) killswitch = true;
-            }
-        }
     }
 
     state.computerPlay = function(avoid_twerqle_bait) {
