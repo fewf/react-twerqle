@@ -5,6 +5,7 @@ var _ = require('underscore');
 exports.playTurn = function(state) {
 
     var player = state.getCurrentPlayer();
+    var score = player.score;
     var move = state.computerPlay();
     if (move[0] === 'play') {
 
@@ -15,6 +16,8 @@ exports.playTurn = function(state) {
         };
 
         player.endTurn(state);
+
+        return 
     } else {
         player.selectedTiles = move[1];
         player.endTurn(state);

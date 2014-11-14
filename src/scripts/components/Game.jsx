@@ -17,7 +17,8 @@ var Game = React.createClass({
                 game: this.props.game,
                 gameOver: false,
                 selectedTile: null,
-                exchangeTiles: null
+                exchangeTiles: null,
+                gameMessage: ""
                 }
     },
     render: function() {
@@ -31,7 +32,7 @@ var Game = React.createClass({
         return (
             <div id="game-root">
                 
-                <GameDataView game={this.state.game} />
+
 
                 <Board 
                     tilePlacements={tilePlacements} 
@@ -44,12 +45,15 @@ var Game = React.createClass({
                     turnHistory={this.state.game.turnHistory}
                     selectedTile={this.state.selectedTile}
                     exchangeTiles={this.state.exchangeTiles}
+                    message={this.state.gameMessage}
+
                     playerTileSelect={this.playerTileSelect}
                     handleEndTurn={this.handleEndTurn}
                     handleExchange={this.handleExchange}
                     handleTurnReset={this.handleTurnReset}
                     playerTileDragStart={this.playerTileDragStart}
                     playerTileDragEnd={this.playerTileDragEnd} />
+                <GameDataView game={this.state.game} />
             </div>
             )                    
     },
@@ -57,9 +61,9 @@ var Game = React.createClass({
         if (!this.state.exchangeTiles) {
             // handling for tile placement mode
             if (this.state.selectedTile !== tileComponent) {
-                this.setState({selectedTile: tileComponent});
+                this.setState({selectedTile: tileComponent, gameMessage: "Tile selected"});
             } else {
-                this.setState({selectedTile: null});
+                this.setState({selectedTile: null, gameMessage: ""});
             }                
         } else {
             // handling for exchange mode
@@ -70,7 +74,7 @@ var Game = React.createClass({
             } else {
                 excTiles.splice(index, 1);
             }
-            this.setState({ exchangeTiles: excTiles });
+            this.setState({ exchangeTiles: excTiles, gameMessage: "Tile selected" });
         }
 
     },
@@ -79,7 +83,7 @@ var Game = React.createClass({
         if (!this.state.selectedTile) return;
         var success = game.getCurrentPlayer().selectTile(game, this.state.selectedTile.props.tile).placeSelectedTile(game, playableCoord.props.coords);
         if (success) {
-            this.setState({game: app.game, selectedTile: null});
+            this.setState({game: app.game, selectedTile: null, gameMessage: "Tile placed"});
         }
     },
     handleEndTurn: function() {
@@ -87,26 +91,38 @@ var Game = React.createClass({
         if (!game.getCurrentPlayer().endTurn(game)) {
             return false;
         }
-
-        this.routeGame();
+        this.setState({game: game})
     },
     handleExchange: function() {
         if (this.state.exchangeTiles) {
             var player = this.state.game.getCurrentPlayer()
-            player.selectedTiles = this.state.exchangeTiles.map(function(tileComp) { return tileComp.props.tile });
+            player.selectedTiles = this.state.exchangeTiles.map(
+                                    function(tileComp) { 
+                                        return tileComp.props.tile 
+                                    });
+
+            var numTiles = player.selectedTiles.length;
+
             if (player.endTurn(this.state.game)) {
-                player.selectedTiles = [];
+                this.setState({
+                    game: this.state.game, 
+                    gameMessage: numTiles + " tiles exchanged"
+                });
             }
             this.computerPlay();
         } else {
             this.handleTurnReset();
-            this.setState({exchangeTiles: []});
+            this.setState({exchangeTiles: [], gameMessage: "Choose tiles to exchange"});
         }
     },
     handleTurnReset: function() {
         this.state.game.resetTurn();
         this.state.game.getCurrentPlayer().selectedTiles = [];
-        this.setState({game: this.state.game, selectedTile: null, exchangeTiles: null});
+        this.setState({
+                    game: this.state.game, 
+                    selectedTile: null, 
+                    exchangeTiles: null,
+                    gameMessage: "Turn reset"});
     },
     playerTileDragStart: function(tile) {
         if (this.state.selectedTile !== tile) this.playerTileSelect(tile);
@@ -117,7 +133,7 @@ var Game = React.createClass({
             this.playableCoordClick(this.over);
             this.over = null;
         }
-        this.setState({selectedTile: null});
+        this.setState({selectedTile: null, gameMessage: ""});
     },        
     playableCoordDragEnter: function(playableCoord, e) {
         this.over = playableCoord;
@@ -132,9 +148,8 @@ var Game = React.createClass({
     routeGame: function() {
         adaptor.saveGameState(this.state.game);
         if (this.state.game.gameOver()) {
-            console.log('game over');
             delete localStorage["twerqle.game.in.progress"];
-            this.setState({gameOver: true});
+            this.setState({gameOver: true, gameMessage: "Game over"});
         } else if (this.state.game.getCurrentPlayer().type) {
             this.computerPlay();
         }
@@ -150,7 +165,7 @@ var Game = React.createClass({
             app.twq.playTurn(app.game);
 
             that.setState({game: app.game, selectedTile: null, exchangeTiles: null});            
-            // that.routeGame();
+
         }, playSpeed);
     },        
     componentDidMount: function() {
@@ -160,7 +175,14 @@ var Game = React.createClass({
         if (this.state.game) this.routeGame();
     },
     componentWillReceiveProps: function(nextProps) {
-        this.setState({game: nextProps.game});
+        this.setState({
+            game: nextProps.game, 
+            gameMessage: (<a 
+                href="http://en.wikipedia.org/wiki/Qwirkle#Play" 
+                target="_blank">
+                Know how to play?
+                </a>)
+        });
     }
 });
 

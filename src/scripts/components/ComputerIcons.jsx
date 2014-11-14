@@ -28,6 +28,7 @@ var ComputerIcons = React.createClass({
         );
     },
     generateComputerIcon: function(num) {
+        if (num == 2 && this.props.numOpponents < 2) return;
 
         var isActivated = this.props.numOpponents > num;
         var translate = (38 * num) + " 18";

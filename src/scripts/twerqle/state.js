@@ -359,7 +359,7 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
 
 
         this.endTurn();
-
+        return turnScore;
 
     }
 

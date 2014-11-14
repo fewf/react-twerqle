@@ -39,10 +39,10 @@ var GameGenerator = React.createClass({
                 id="game-generator"
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave} >
-                {computerIcons}
                 <a 
                     className="button-link"
                     onClick={this.handleGameStart}>NEW GAME</a>
+                {computerIcons}
             </div>
             )
     },

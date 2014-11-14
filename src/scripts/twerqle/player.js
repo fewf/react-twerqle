@@ -45,7 +45,7 @@ Player.prototype.endTurn = function(state) {
     }
 
     if ( state.turnHistory.length ) {
-        state.endScoringTurn();
+        return state.endScoringTurn();
     } else if ( this.selectedTiles.length ) {
         this.exchangeTiles( state, this.selectedTiles );
         state.endExchangeTurn(this.selectedTiles);
@@ -53,7 +53,6 @@ Player.prototype.endTurn = function(state) {
     } else {
         return false;
     }
-    return true;
 }
 
 Player.prototype.deselectTile = function( tile ) {

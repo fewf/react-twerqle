@@ -1,3 +1,12 @@
-.Game{
-  border: 1px dashed #f00;
+#player-controls-and-game-data {
+	position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 100px;
+    z-index: 100;
+    border-top: 2px solid black;
+}
+#player-controls-and-game-data > div {
+	display: inline-block;
+	float:left;
 }

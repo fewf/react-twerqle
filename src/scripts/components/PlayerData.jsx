@@ -22,8 +22,7 @@ var PlayerData = React.createClass({
 			</svg>
         			)
     return (
-        <div className="player-data">
-
+        <div>
         	{svg}
         	<p>{this.props.player.score}</p>
         	{this.props.winner ? (<p>WINNER</p>) : null}

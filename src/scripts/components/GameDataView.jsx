@@ -15,20 +15,20 @@ var GameDataView = React.createClass({
                         this.props.game.determineWinner() : [];
 
         var tileBag = (
-            <svg width="64px" height="64px">
+            <svg id="tile-bag-svg" width="64px" height="64px">
                 <path transform="scale(0.125)" d="M336,111.797c8.844,0,16,7.156,16,16s-7.156,16-16,16H176c-8.844,0-16-7.156-16-16s7.156-16,16-16H336z M345.25,159.797
                     H166.734C87.469,217.609,32,340.141,32,417.953c0,104.656,100.281,93.5,224,93.5s224,11.156,224-93.5
                     C480,340.141,424.531,217.609,345.25,159.797z M166.734,95.797H345.25c0,0,70.75-61.719,38.75-88.719s-103,30-128,28
                     c-25,2-96-55-128-28S166.734,95.797,166.734,95.797z"/>
-                <text x="32" y="32" textAnchor="middle" fill="white">
+                <text x="32" y="50" textAnchor="middle" fill="white" fontSize="28px">
                     {this.props.game.bag.length}
                 </text>
             </svg>
-
         );
         var activePlayer = this.props.game.getCurrentPlayer();
-        var playerData = this.props.game.players.map(function(player) {
+        var playerData = this.props.game.players.map(function(player, i) {
             return (<PlayerData 
+                        key={i}
                         player={player} 
                         active={player === activePlayer} 
                         winner={winners.indexOf(player) !== -1} />);
@@ -36,8 +36,9 @@ var GameDataView = React.createClass({
 
         return (
             <div id="game-data-view">
-
-                {playerData}
+                <div id="player-data">
+                    {playerData}
+                </div>
                 {tileBag}
             </div>
         );
