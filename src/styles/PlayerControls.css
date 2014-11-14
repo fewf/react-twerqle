@@ -5,31 +5,34 @@
     height: 100px;
     z-index: 100;
     border-top: 2px solid black;	
-    background-color: pink; 
+    background-color: pink;
+    width: 400px;
 }
 #game-message-and-player-buttons {
+	position: relative;
 	width: 100%;
+	height: 33px;
 }
 .playerControls div p {
 	font-family: monospace;
 	display: inline-block;
-/*	padding: 3px;
-	margin-right: 2em;
-	margin-bottom: 5px;*/
+	width: 275px;
+	margin: 0 1em;
 	text-align: center;
-	width: 240px;
-	margin: 0;
 	background-color: rgba(255,255,255,.8);
 	border-radius: 5px;
 }
 .player-buttons {
-	display: inline-block;
-	float: right;
-	width: 30%;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	/*width: 30%;*/
+}
+.player-buttons a {
+	cursor: pointer;
 }
 .player-buttons a svg circle {
 	fill: lightgreen;
-	cursor: pointer;
 }
 .player-buttons a:hover svg circle {
 	fill: green;
@@ -38,7 +41,7 @@
 	fill: yellow;
 }
 ul#rack {
-	display: block;
+	display: table;
 	margin: 0 auto 5px;
 	background-color: rgba(255,255,255,.8);
 	border-radius: 3px;

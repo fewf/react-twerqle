@@ -16,18 +16,6 @@ var Player = function(name, type, state) {
     this.score = 0;
     this.tiles = [];
     this.selectedTiles = [];
-
-    // this.turnTiles = function() {
-    //     if (!this.isActive(state) || !state.turnHistory.length) return this.tiles.slice(0);
-
-    //     var rackCopy = this.tiles.slice(0);
-    //     var tile;
-    //     for (var i = 0; i < state.turnHistory.length; i++) {
-    //         tile = state.turnHistory[i][2];
-    //         rackCopy.splice(rackCopy.indexOf(tile), 1);
-    //     };
-    //     return rackCopy;
-    // }
 }
 
 // state changing functions
@@ -47,9 +35,12 @@ Player.prototype.endTurn = function(state) {
     if ( state.turnHistory.length ) {
         return state.endScoringTurn();
     } else if ( this.selectedTiles.length ) {
-        this.exchangeTiles( state, this.selectedTiles );
-        state.endExchangeTurn(this.selectedTiles);
-        this.selectedTiles = [];
+        if (this.exchangeTiles( state, this.selectedTiles )) {
+            state.endExchangeTurn(this.selectedTiles);
+            this.selectedTiles = [];
+            return true;
+        }
+
     } else {
         return false;
     }

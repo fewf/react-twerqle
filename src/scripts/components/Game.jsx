@@ -18,7 +18,7 @@ var Game = React.createClass({
                 gameOver: false,
                 selectedTile: null,
                 exchangeTiles: null,
-                gameMessage: ""
+                gameMessage: "Well, hello"
                 }
     },
     render: function() {
@@ -95,21 +95,25 @@ var Game = React.createClass({
     },
     handleExchange: function() {
         if (this.state.exchangeTiles) {
-            var player = this.state.game.getCurrentPlayer()
-            player.selectedTiles = this.state.exchangeTiles.map(
-                                    function(tileComp) { 
-                                        return tileComp.props.tile 
-                                    });
+            if (!this.state.exchangeTiles.length) {
+                this.setState({exchangeTiles: null, gameMessage: "Exchange cancelled."});
+            } else {
+                var player = this.state.game.getCurrentPlayer()
+                player.selectedTiles = this.state.exchangeTiles.map(
+                                        function(tileComp) { 
+                                            return tileComp.props.tile 
+                                        });
 
-            var numTiles = player.selectedTiles.length;
+                var numTiles = player.selectedTiles.length;
 
-            if (player.endTurn(this.state.game)) {
-                this.setState({
-                    game: this.state.game, 
-                    gameMessage: numTiles + " tiles exchanged"
-                });
+                if (player.endTurn(this.state.game)) {
+                    this.setState({
+                        game: this.state.game, 
+                        gameMessage: numTiles + " tiles exchanged",
+                        exchangeTiles: []
+                    });
+                }
             }
-            this.computerPlay();
         } else {
             this.handleTurnReset();
             this.setState({exchangeTiles: [], gameMessage: "Choose tiles to exchange"});
