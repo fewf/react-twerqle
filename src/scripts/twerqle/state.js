@@ -363,8 +363,6 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
             this.playableCache = this.getPlayableOnMove(move.coords);
         }
 
-
-        this.endTurn();
         return turnScore;
 
     }
@@ -372,12 +370,9 @@ exports.initState = function(playerNames, playerTypes, numTypes, numCopies) {
     state.endExchangeTurn = function(selectedTiles) {
         this.gameHistory.push(['exchange', selectedTiles]);
 
-        this.endTurn();
+        return selectedTiles.length;
     }
 
-    state.endTurn = function() {
-        // pass
-    }
 
     state.validateTurnHistory = function(th) {
         if (typeof th == 'undefined') th = this.turnHistory;

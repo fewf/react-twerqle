@@ -22,11 +22,7 @@ var GameGenerator = React.createClass({
                                     addBot={this.addBot} 
                                     removeBot={this.removeBot} />
                                 ) : null;
-        var linkText = this.state.showIcons ? "START" : "NEW GAME";
-        var clickFunc = this.state.showIcons ? this.handleGameStart :
-                                               function(e) {
-                                                    this.setState({showIcons: true});
-                                               }.bind(this);
+
 
         var mouseEnter = function(e) {
                                 this.setState({showIcons: true});
@@ -56,6 +52,15 @@ var GameGenerator = React.createClass({
     },
     handleGameStart: function(e) {
         app.game = app.twq.startGame(this.state.numOpponents);
+        var botNum = 1;
+        for (var i = 0; i < app.game.players.length; i++) {
+            if (app.game.players[i].type) {
+                app.game.players[i].name = "Bot " + botNum;
+                botNum++;
+            } else {
+                app.game.players[i].name = "You";
+            }
+        };
         this.props.handleGameStart(app.game);
         this.setState({showIcons: false});
     }

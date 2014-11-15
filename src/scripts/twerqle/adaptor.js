@@ -14,13 +14,12 @@ exports.playTurn = function(state) {
                 throw 'Bot failed.';
             }
         };
+        
 
-        player.endTurn(state);
-
-        return 
+        return player.endTurn(state);
     } else {
         player.selectedTiles = move[1];
-        player.endTurn(state);
+        return player.endTurn(state);
     }
 }
 
@@ -36,7 +35,7 @@ exports.startGame = function(numBots, numTypes, numCopies) {
     var playerTypes = [0].concat(_.range(numBots).map(function() { return 10; }));
 
 
-    return State.initState(playerNames, playerTypes, 6, 3);
+    return State.initState(playerNames, playerTypes, 4, 1);
 }
 
 

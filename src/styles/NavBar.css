@@ -9,11 +9,11 @@
     /*padding: em;*/
 }
 #nav-bar > * {
-    margin: 0 1em;
+    /*margin: 0 1em;*/
     float: left;
 }
 #nav-bar h1 {
     font: bold 54px monospace;
-
-    /*vertical-align: middle;*/
+    text-shadow: -2px 2px 3px rgba(10,10,255,1);
+    margin-right: 10px;
 }

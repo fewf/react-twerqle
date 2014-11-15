@@ -88,10 +88,16 @@ var Game = React.createClass({
     },
     handleEndTurn: function() {
         var game = this.state.game;
-        if (!game.getCurrentPlayer().endTurn(game)) {
+        var success = game.getCurrentPlayer().endTurn(game);
+        if (!success) {
             return false;
+        } else {
+            this.setState({
+                game: game, 
+                gameMessage: "You scored " + success + " points"
+            }, this.routeGame());
         }
-        this.setState({game: game})
+        
     },
     handleExchange: function() {
         if (this.state.exchangeTiles) {
@@ -104,14 +110,14 @@ var Game = React.createClass({
                                             return tileComp.props.tile 
                                         });
 
-                var numTiles = player.selectedTiles.length;
+                var success = player.endTurn(this.state.game);
 
-                if (player.endTurn(this.state.game)) {
+                if (success) {
                     this.setState({
                         game: this.state.game, 
-                        gameMessage: numTiles + " tiles exchanged",
+                        gameMessage: success + " tiles exchanged",
                         exchangeTiles: []
-                    });
+                    }, this.routeGame());
                 }
             }
         } else {
@@ -162,21 +168,35 @@ var Game = React.createClass({
         if (!playSpeed) {
             playSpeed = 1000;
         }
+        var playerName = this.state.game.getCurrentPlayer().name;
+        var outcome = app.twq.playTurn(this.state.game);
+        var lastMove = this.state.game.gameHistory[
+                            this.state.game.gameHistory.length - 1
+                        ];
 
+        var gameMessage;
+        if (lastMove[0] === "exchange") {
+            gameMessage = playerName + " exchanged " + outcome + " tiles";
+        } else {
+            gameMessage = playerName + " scored " + outcome + " points";
+        }
+        
+        this.setState({
+            game: this.state.game,
+            gameMessage: gameMessage
+        });
 
-        var that = this;
         window.setTimeout(function() {
-            app.twq.playTurn(app.game);
 
-            that.setState({game: app.game, selectedTile: null, exchangeTiles: null});            
+            this.setState({
+                game: this.state.game,
+                gameMessage: gameMessage
+            }, this.routeGame());
 
-        }, playSpeed);
+        }.bind(this), playSpeed);
     },        
     componentDidMount: function() {
-        if (this.state.game) this.routeGame();
-    },
-    componentDidUpdate: function() {
-        if (this.state.game) this.routeGame();
+        this.routeGame();
     },
     componentWillReceiveProps: function(nextProps) {
         this.setState({
@@ -186,7 +206,7 @@ var Game = React.createClass({
                 target="_blank">
                 Know how to play?
                 </a>)
-        });
+        }, this.routeGame);
     }
 });
 
