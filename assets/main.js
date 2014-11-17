@@ -8246,25 +8246,19 @@
 	                throw 'Bot failed.';
 	            }
 	        };
+	        
 
-	        player.endTurn(state);
-
-	        return 
+	        return player.endTurn(state);
 	    } else {
 	        player.selectedTiles = move[1];
-	        player.endTurn(state);
+	        return player.endTurn(state);
 	    }
 	}
 
 	exports.startGame = function(numBots, numTypes, numCopies) {
-	    // game defaults:
-	    if (typeof numBots === 'undefined') numBots = 1;
-	    if (typeof numTypes === 'undefined') numTypes = 4;
-	    if (typeof numCopies === 'undefined') numCopies = 1;
 
 	    var playerNames = _.range(numBots + 1).map(function(x) { return 'player ' + (x + 1); });
-	    // var playerNames = _.range(numBots).map(function(x) { return 'player ' + (x + 1); });
-	    // var playerTypes = _.range(numBots).map(function() { return 10; });
+
 	    var playerTypes = [0].concat(_.range(numBots).map(function() { return 10; }));
 
 
@@ -9834,11 +9828,7 @@
 	                                    addBot: this.addBot, 
 	                                    removeBot: this.removeBot})
 	                                ) : null;
-	        var linkText = this.state.showIcons ? "START" : "NEW GAME";
-	        var clickFunc = this.state.showIcons ? this.handleGameStart :
-	                                               function(e) {
-	                                                    this.setState({showIcons: true});
-	                                               }.bind(this);
+
 
 	        var mouseEnter = function(e) {
 	                                this.setState({showIcons: true});
@@ -9868,6 +9858,15 @@
 	    },
 	    handleGameStart: function(e) {
 	        app.game = app.twq.startGame(this.state.numOpponents);
+	        var botNum = 1;
+	        for (var i = 0; i < app.game.players.length; i++) {
+	            if (app.game.players[i].type) {
+	                app.game.players[i].name = "Bot " + botNum;
+	                botNum++;
+	            } else {
+	                app.game.players[i].name = "You";
+	            }
+	        };
 	        this.props.handleGameStart(app.game);
 	        this.setState({showIcons: false});
 	    }
@@ -14672,7 +14671,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".computer-icon-selector{\n  cursor: pointer;\n}", ""]);
+	exports.push([module.id, ".computer-icons {\n\tmargin: 0 10px;\n}\n.computer-icon-selector{\n  cursor: pointer;\n}", ""]);
 
 /***/ },
 /* 97 */
@@ -14693,14 +14692,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "#game-generator {\n\tbackground-color: rgba(255,255,255,0.8);\n    height: 50px;\n    border-radius: 5px;\n    padding: 25px 1em;\n}\n\n#game-generator svg text {\n\tfont: bold 16px monospace;\n}\n\n.button-link {\n\tcursor: pointer;\n\tdisplay: inline-block;\n\theight: 30px;\n\twidth: 50px;\n\t/*vertical-align: middle;*/\n\ttext-align: center;\n    padding: 10px 15px;\n    /*margin-left: 1em;*/\n    background: #4479BA;\n    color: #FFF;\n    -webkit-border-radius: 4px;\n    -moz-border-radius: 4px;\n    border-radius: 4px;\n    border: solid 1px #20538D;\n    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);\n    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);\n    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);\n    -webkit-transition-duration: 0.2s;\n    -moz-transition-duration: 0.2s;\n    transition-duration: 0.2s;\n    -webkit-user-select:none;\n    -moz-user-select:none;\n    -ms-user-select:none;\n    user-select:none;\n}\n.button-link:hover {\n    background: #356094;\n    border: solid 1px #2A4E77;\n    text-decoration: none;\n}\n.button-link:active {\n    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);\n    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);\n    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);\n    background: #2E5481;\n    border: solid 1px #203E5F;\n}", ""]);
+	exports.push([module.id, "#game-generator {\n\tbackground-color: rgba(255,255,255,0.8);\n    height: 50px;\n    border-radius: 5px;\n    padding: 25px 1em;\n}\n\n#game-generator svg text {\n\tfont: bold 16px monospace;\n}\n\n.button-link {\n\tcursor: pointer;\n\tdisplay: inline-block;\n\theight: 30px;\n\twidth: 50px;\n\tfloat:left;\n\ttext-align: center;\n    padding: 10px 15px;\n    /*margin-left: 1em;*/\n    background: #4479BA;\n    color: #FFF;\n    -webkit-border-radius: 4px;\n    -moz-border-radius: 4px;\n    border-radius: 4px;\n    border: solid 1px #20538D;\n    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);\n    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);\n    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);\n    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);\n    -webkit-transition-duration: 0.2s;\n    -moz-transition-duration: 0.2s;\n    transition-duration: 0.2s;\n    -webkit-user-select:none;\n    -moz-user-select:none;\n    -ms-user-select:none;\n    user-select:none;\n}\n.button-link:hover {\n    background: #356094;\n    border: solid 1px #2A4E77;\n    text-decoration: none;\n}\n.button-link:active {\n    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);\n    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);\n    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);\n    background: #2E5481;\n    border: solid 1px #203E5F;\n}", ""]);
 
 /***/ },
 /* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "#nav-bar{\n    position: fixed;\n    top: 0;\n    /*width: 100%;*/\n    height: 100px;\n    z-index: 100;\n    border-bottom: 2px solid black;\n    background-color: greenyellow;\n    /*padding: em;*/\n}\n#nav-bar > * {\n    margin: 0 1em;\n    float: left;\n}\n#nav-bar h1 {\n    font: bold 54px monospace;\n\n    /*vertical-align: middle;*/\n}", ""]);
+	exports.push([module.id, "#nav-bar{\n    position: fixed;\n    top: 0;\n    /*width: 100%;*/\n    height: 100px;\n    z-index: 100;\n    border-bottom: 2px solid black;\n    background-color: greenyellow;\n    /*padding: em;*/\n}\n#nav-bar > * {\n    /*margin: 0 1em;*/\n    float: left;\n}\n#nav-bar h1 {\n    font: bold 54px monospace;\n    text-shadow: -2px 2px 3px rgba(10,10,255,1);\n    margin-right: 10px;\n}", ""]);
 
 /***/ },
 /* 101 */
@@ -14714,7 +14713,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink; \n}\n#game-message-and-player-buttons {\n\twidth: 100%;\n}\n.playerControls div p {\n\tfont-family: monospace;\n\tdisplay: inline-block;\n/*\tpadding: 3px;\n\tmargin-right: 2em;\n\tmargin-bottom: 5px;*/\n\ttext-align: center;\n\twidth: 240px;\n\tmargin: 0;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.player-buttons {\n\tdisplay: inline-block;\n\tfloat: right;\n\twidth: 30%;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n\tcursor: pointer;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: block;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
+	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 400px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 275px;\n\tmargin: 0 1em;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.player-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n\t/*width: 30%;*/\n}\n.player-buttons a {\n\tcursor: pointer;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
 
 /***/ },
 /* 103 */
@@ -14811,8 +14810,22 @@
 	                          minX: this.state.minX, 
 	                          minY: this.state.minY}), 
 	                React.DOM.div({id: "boardControls"}, 
-	                    React.DOM.button({disabled: cellSize >= 70 ? "disabled" : "", onClick: this.zoomIn}, "+"), 
-	                    React.DOM.button({disabled: cellSize <= 10 ? "disabled" : "", onClick: this.zoomOut}, "-")
+	                    React.DOM.button({disabled: cellSize >= 70 ? "disabled" : "", onClick: this.zoomIn}, 
+	                        React.DOM.svg({height: "48", width: "48"}, 
+	                            React.DOM.g({transform: "scale(0.5)"}, 
+	                                React.DOM.path({d: "M90.829,85.171L68.121,62.464C73.047,56.307,76,48.5,76,40C76,20.118,59.882,4,40,4C20.118,4,4,20.118,4,40s16.118,36,36,36  c8.5,0,16.306-2.953,22.464-7.879l22.708,22.708c1.562,1.562,4.095,1.562,5.657,0C92.391,89.267,92.391,86.733,90.829,85.171z   M40,68c-15.464,0-28-12.536-28-28s12.536-28,28-28c15.464,0,28,12.536,28,28S55.464,68,40,68z"}), 
+	                                React.DOM.path({d: "M52,36h-8v-8c0-2.209-1.791-4-4-4s-4,1.791-4,4v8h-8c-2.209,0-4,1.791-4,4s1.791,4,4,4h8v8c0,2.209,1.791,4,4,4s4-1.791,4-4  v-8h8c2.209,0,4-1.791,4-4S54.209,36,52,36z"})
+	                            )
+	                        )
+	                    ), 
+	                    React.DOM.button({disabled: cellSize <= 10 ? "disabled" : "", onClick: this.zoomOut}, 
+	                        React.DOM.svg({height: "48", width: "48"}, 
+	                            React.DOM.g({transform: "scale(0.5)"}, 
+	                                React.DOM.path({d: "M90.829,85.171L68.121,62.464C73.047,56.307,76,48.5,76,40C76,20.118,59.882,4,40,4C20.118,4,4,20.118,4,40s16.118,36,36,36  c8.5,0,16.306-2.953,22.464-7.879l22.708,22.708c1.562,1.562,4.095,1.562,5.657,0C92.391,89.267,92.391,86.733,90.829,85.171z   M40,68c-15.464,0-28-12.536-28-28s12.536-28,28-28c15.464,0,28,12.536,28,28S55.464,68,40,68z"}), 
+	                                React.DOM.path({d: "M56,40c0,2.209-1.791,4-4,4H28c-2.209,0-4-1.791-4-4l0,0c0-2.209,1.791-4,4-4h24C54.209,36,56,37.791,56,40L56,40z"})
+	                            )
+	                        )
+	                    )
 	                )
 	            )
 	            )
@@ -15021,7 +15034,7 @@
 	                gameOver: false,
 	                selectedTile: null,
 	                exchangeTiles: null,
-	                gameMessage: ""
+	                gameMessage: "Well, hello"
 	                }
 	    },
 	    render: function() {
@@ -15091,28 +15104,38 @@
 	    },
 	    handleEndTurn: function() {
 	        var game = this.state.game;
-	        if (!game.getCurrentPlayer().endTurn(game)) {
+	        var success = game.getCurrentPlayer().endTurn(game);
+	        if (!success) {
 	            return false;
+	        } else {
+	            this.setState({
+	                game: game, 
+	                gameMessage: "You scored " + success + " points"
+	            }, this.routeGame);
 	        }
-	        this.setState({game: game})
+	        
 	    },
 	    handleExchange: function() {
 	        if (this.state.exchangeTiles) {
-	            var player = this.state.game.getCurrentPlayer()
-	            player.selectedTiles = this.state.exchangeTiles.map(
-	                                    function(tileComp) { 
-	                                        return tileComp.props.tile 
-	                                    });
+	            if (!this.state.exchangeTiles.length) {
+	                this.setState({exchangeTiles: null, gameMessage: "Exchange cancelled."});
+	            } else {
+	                var player = this.state.game.getCurrentPlayer()
+	                player.selectedTiles = this.state.exchangeTiles.map(
+	                                        function(tileComp) { 
+	                                            return tileComp.props.tile 
+	                                        });
 
-	            var numTiles = player.selectedTiles.length;
+	                var success = player.endTurn(this.state.game);
 
-	            if (player.endTurn(this.state.game)) {
-	                this.setState({
-	                    game: this.state.game, 
-	                    gameMessage: numTiles + " tiles exchanged"
-	                });
+	                if (success) {
+	                    this.setState({
+	                        game: this.state.game, 
+	                        gameMessage: success + " tiles exchanged",
+	                        exchangeTiles: []
+	                    }, this.routeGame);
+	                }
 	            }
-	            this.computerPlay();
 	        } else {
 	            this.handleTurnReset();
 	            this.setState({exchangeTiles: [], gameMessage: "Choose tiles to exchange"});
@@ -15161,21 +15184,35 @@
 	        if (!playSpeed) {
 	            playSpeed = 1000;
 	        }
+	        var playerName = this.state.game.getCurrentPlayer().name;
+	        var outcome = app.twq.playTurn(this.state.game);
+	        var lastMove = this.state.game.gameHistory[
+	                            this.state.game.gameHistory.length - 1
+	                        ];
 
+	        var gameMessage;
+	        if (lastMove[0] === "exchange") {
+	            gameMessage = playerName + " exchanged " + outcome + " tiles";
+	        } else {
+	            gameMessage = playerName + " scored " + outcome + " points";
+	        }
+	        
+	        this.setState({
+	            game: this.state.game,
+	            gameMessage: gameMessage
+	        });
 
-	        var that = this;
 	        window.setTimeout(function() {
-	            app.twq.playTurn(app.game);
 
-	            that.setState({game: app.game, selectedTile: null, exchangeTiles: null});            
+	            this.setState({
+	                game: this.state.game,
+	                gameMessage: gameMessage
+	            }, this.routeGame);
 
-	        }, playSpeed);
+	        }.bind(this), playSpeed);
 	    },        
 	    componentDidMount: function() {
-	        if (this.state.game) this.routeGame();
-	    },
-	    componentDidUpdate: function() {
-	        if (this.state.game) this.routeGame();
+	        this.routeGame();
 	    },
 	    componentWillReceiveProps: function(nextProps) {
 	        this.setState({
@@ -15185,7 +15222,7 @@
 	                target: "_blank"}, 
 	                "Know how to play?"
 	                ))
-	        });
+	        }, this.routeGame);
 	    }
 	});
 
@@ -15416,27 +15453,27 @@
 	__webpack_require__(208);
 
 	var PlayerData = React.createClass({displayName: 'PlayerData',
-	  render: function () {
-	  	var fill = this.props.active ? "green" : "black";
-	  	var svg = this.props.player.type ? (        	
-	  			React.DOM.svg({height: "32", width: "32", fill: fill}, 
-	        		React.DOM.polygon({points: "0,30 4,22 28,22 32,30  "}), 
-	        		React.DOM.path({d: "M4,2v18h24V2H4z M26,18H6V4h20V18z"})
-	        	)
-		        		) : (
-				React.DOM.svg({height: "32px", width: "32px", fill: fill}, 
-					React.DOM.path({d: "M0,32h32v-8c0,0,0-4-4-4c-2,0-20,0-24,0s-4,4-4,4V32z"}), 
-					React.DOM.circle({cx: "16", cy: "10", r: "8"})
-				)
-	        			)
-	    return (
-	        React.DOM.div(null, 
-	        	svg, 
-	        	React.DOM.p(null, this.props.player.score), 
-	        	this.props.winner ? (React.DOM.p(null, "WINNER")) : null
-	        )
-	      );
-	  }
+	        render: function () {
+	        var fill = this.props.active ? "green" : "black";
+	        var svg = this.props.player.type ? (
+	                React.DOM.svg({height: "32", width: "32", fill: fill}, 
+	                    React.DOM.polygon({points: "0,30 4,22 28,22 32,30  "}), 
+	                    React.DOM.path({d: "M4,2v18h24V2H4z M26,18H6V4h20V18z"})
+	                )
+	            ) : (
+	                React.DOM.svg({height: "32px", width: "32px", fill: fill}, 
+	                    React.DOM.path({d: "M0,32h32v-8c0,0,0-4-4-4c-2,0-20,0-24,0s-4,4-4,4V32z"}), 
+	                    React.DOM.circle({cx: "16", cy: "10", r: "8"})
+	                )
+	            )
+	        return (
+	            React.DOM.div(null, 
+	                svg, 
+	                React.DOM.p(null, this.props.player.score), 
+	                this.props.winner ? (React.DOM.p(null, "WINNER")) : null
+	            )
+	        );
+	    }
 	});
 
 	module.exports = PlayerData;
@@ -24563,18 +24600,6 @@
 	    this.score = 0;
 	    this.tiles = [];
 	    this.selectedTiles = [];
-
-	    // this.turnTiles = function() {
-	    //     if (!this.isActive(state) || !state.turnHistory.length) return this.tiles.slice(0);
-
-	    //     var rackCopy = this.tiles.slice(0);
-	    //     var tile;
-	    //     for (var i = 0; i < state.turnHistory.length; i++) {
-	    //         tile = state.turnHistory[i][2];
-	    //         rackCopy.splice(rackCopy.indexOf(tile), 1);
-	    //     };
-	    //     return rackCopy;
-	    // }
 	}
 
 	// state changing functions
@@ -24594,9 +24619,11 @@
 	    if ( state.turnHistory.length ) {
 	        return state.endScoringTurn();
 	    } else if ( this.selectedTiles.length ) {
-	        this.exchangeTiles( state, this.selectedTiles );
-	        state.endExchangeTurn(this.selectedTiles);
-	        this.selectedTiles = [];
+	        if (this.exchangeTiles( state, this.selectedTiles )) {
+	            this.selectedTiles = [];            
+	            return state.endExchangeTurn(this.selectedTiles);
+	        }
+
 	    } else {
 	        return false;
 	    }
@@ -24752,7 +24779,6 @@
 	var _ = __webpack_require__(33);
 	var Player = __webpack_require__(216);
 	var Board = __webpack_require__(93);
-	// var Combs = require('./combinatorics').Combinatorics;
 
 	exports.sum = function(nums) {
 	    var sum = 0;
@@ -25031,13 +25057,15 @@
 	    }
 
 	    state.scoreLine = function(line) {
-	        // below logic works on all but the very first play. handling in place in scoreturn for first play.
+	        // below logic works on all but the very first play. 
+	        // handling in place in scoreturn for first play.
 	        if (line.length === 1) return 0;
 
 	        if (line.length === this.numTypes) return this.numTypes * 2;
 
 	        return line.length;
 	    }
+
 	    state.gameOver = function() {
 	        // game can't be over if there are still tiles in the bag
 	        if (this.bag.length) return false;
@@ -25048,10 +25076,10 @@
 	                    return !player.tiles.length;
 	                }).length;
 	    }
+
 	    state.scoreTurn = function(moveLines) {
 	        var outer = this;
 	        var score = 0;
-	        // var th = this.turnHistory;
 
 	        if (!this.turnHistory.length) return false;
 
@@ -25071,6 +25099,8 @@
 	    state.resetTurn = function () {
 	        var player = this.getCurrentPlayer();
 
+	        // pop each tilePlacement off turn history
+	        // and return placed tile to player
 	        while (this.turnHistory.length) {
 	            player.tiles.push(this.turnHistory.pop().tile);
 	        }
@@ -25078,6 +25108,9 @@
 	    }
 
 	    state.determineWinner = function() {
+	        // loop through players and find player(s) with the
+	        // highest score
+
 	        var winningScore = -1;
 	        for (var i = this.players.length - 1; i >= 0; i--) {
 	            if (this.players[i].score > winningScore) {
@@ -25108,8 +25141,6 @@
 	            this.playableCache = this.getPlayableOnMove(move.coords);
 	        }
 
-
-	        this.endTurn();
 	        return turnScore;
 
 	    }
@@ -25117,12 +25148,9 @@
 	    state.endExchangeTurn = function(selectedTiles) {
 	        this.gameHistory.push(['exchange', selectedTiles]);
 
-	        this.endTurn();
+	        return selectedTiles.length;
 	    }
 
-	    state.endTurn = function() {
-	        // pass
-	    }
 
 	    state.validateTurnHistory = function(th) {
 	        if (typeof th == 'undefined') th = this.turnHistory;
@@ -25136,44 +25164,12 @@
 	        return true;
 	    }
 
-	    function recurse_optimize_score(rackLines, playables, acc) {
-	        var tile;
-
-	        for (var i = 0; i < playables.length; i++) {
-
-	            for (var j = 0; j < rackLines.length; j++) {
-
-	                for (var k = 0; k < rackLines[j].length; k++) {
-	                    tile = rackLines[j][k];
-
-	                    if (outer.tilePlace(playables[i], tile)) {
-	                        recurse_optimize_score(rack.slice(0,j).concat(rack.slice(j + 1)), avoid_twerqle_bait);
-	                        if (killswitch) {
-	                            outer.turnHistory = [];
-	                            return;
-	                        }
-	                    }
-	                    
-	                }
-	            };
-	        };
-	        if (outer.turnHistory.length) {
-	            var hash = JSON.stringify(outer.turnHistory);
-	            var score = outer.scoreTurn();
-	            var score_value = avoid_twerqle_bait && 
-	                                outer.moveLines().filter(function(line) { return line.length === outer.numTypes - 1; }).length ? score - 2 : score;
-	            scores[hash] = score_value;
-	            outer.undoTilePlace();
-
-	            if (score > numTypes * 2 + 1) killswitch = true;
-	        }
-	    }
-
 	    state.computerPlay = function(avoid_twerqle_bait) {
 
 	        var outer = this;
 	        var plyr = this.getCurrentPlayer();
 
+	        // first turn play for computers. get longest line and play it.
 	        if (this.isInitialState()) {
 	            var coords, move = [];
 	            var line = plyr.getLongestLine(this);
@@ -25184,21 +25180,47 @@
 	            return ['play', move];
 	        }
 
-	        // get all lines within players hand
-	        var lines = plyr.getAllLinesInRack(this);
 
 	        // recurse_optimize_scores will populate the scores object
 	        var scores = {};
-	        // killswitch var set to stop execution of move-finding function
-	        // if a high enough scoring move is found.
-	        var killswitch = false;
 
+	        function recurse_optimize_score(rack) {
+
+	            var playables = outer.playable();
+	            // for each playable coordinate ... 
+	            for (var i = 0; i < playables.length; i++) {
+	                // for each tile in the current looked-at line...
+	                for (var j = rack.length - 1; j >= 0; j--) {
+
+	                    tile = rack[j];
+	                    // attempt to place tile at playable coordinate...
+	                    if (outer.tilePlace(playables[i], tile)) {
+	                        // if it succeeds, recurse back into this function with the
+	                        // placed tile removed from the rack
+	                        recurse_optimize_score(rack.slice(0,j).concat(rack.slice(j + 1)));
+
+	                    }
+	                };
+	            };
+	            if (outer.turnHistory.length) {
+	                var hash = JSON.stringify(outer.turnHistory);
+	                var score = outer.scoreTurn();
+	                // place turnHistory and score into scores dictionary.
+	                scores[hash] = score;
+	                outer.undoTilePlace();
+	            }
+	        }
+
+
+	        // get all lines within player's hand
+	        var lines = plyr.getAllLinesInRack(this);
+
+	        // find moves for each of those lines
 	        for (var i = lines.length - 1; i >= 0; i--) {
 	            recurse_optimize_score(lines[i], avoid_twerqle_bait);
-	            // just-in-case turn resetter
-	            this.resetTurn();
 	        };
 
+	        // loop through scores and find highest scores
 	        var highest = 0; 
 	        var options = []; 
 	        for (move in scores) {
@@ -25210,11 +25232,14 @@
 	            }
 	        }
 
+
 	        if (highest) {
+	            // choose random highest scoring move of options
 	            var index = Math.floor(Math.random() * options.length);
 	            var movesJSON = JSON.parse(options[index]);
 	            var moves = [];
 	            for (var i = 0; i < movesJSON.length; i++) {
+	                // place tiles
 	                moves.push(new Board.TilePlacement(
 	                                new Board.Coordinates(movesJSON[i].coords.x, movesJSON[i].coords.y), 
 	                                movesJSON[i].tile)
@@ -25224,6 +25249,9 @@
 	            return ["play", moves];
 
 	        } else {
+	            // if highest is 0, then no moves were found by computer
+	            // exchange all tiles but those that make the
+	            // longest line in player's rack
 	            var longestLine = plyr.getLongestLine(this);
 	            var rack = plyr.tiles.slice(0);
 	            for (var i = 0; i < longestLine.length; i++) {
@@ -25233,34 +25261,7 @@
 	            return ["exchange", rack];
 	        }
 
-	        function recurse_optimize_score(rack, avoid_twerqle_bait) {
-	            var row, col, tile;
-	            var playables = outer.playable();
-	            for (var i = 0; i < playables.length; i++) {
 
-	                for (var j = rack.length - 1; j >= 0; j--) {
-
-	                    tile = rack[j];
-	                    if (outer.tilePlace(playables[i], tile)) {
-	                        recurse_optimize_score(rack.slice(0,j).concat(rack.slice(j + 1)), avoid_twerqle_bait);
-	                        if (killswitch) {
-	                            outer.turnHistory = [];
-	                            return;
-	                        }
-	                    }
-	                };
-	            };
-	            if (outer.turnHistory.length) {
-	                var hash = JSON.stringify(outer.turnHistory);
-	                var score = outer.scoreTurn();
-	                var score_value = avoid_twerqle_bait && 
-	                                    outer.moveLines().filter(function(line) { return line.length === outer.numTypes - 1; }).length ? score - 2 : score;
-	                scores[hash] = score_value;
-	                outer.undoTilePlace();
-
-	                if (score > numTypes * 2 + 1) killswitch = true;
-	            }
-	        }
 	    }
 
 	    state.computerPlay = function(avoid_twerqle_bait) {
