@@ -35,9 +35,12 @@ Player.prototype.endTurn = function(state) {
     if ( state.turnHistory.length ) {
         return state.endScoringTurn();
     } else if ( this.selectedTiles.length ) {
+
         if (this.exchangeTiles( state, this.selectedTiles )) {
-            this.selectedTiles = [];            
-            return state.endExchangeTurn(this.selectedTiles);
+        
+            var ret = state.endExchangeTurn(this.selectedTiles);
+            this.selectedTiles = [];
+            return ret;            
         }
 
     } else {
