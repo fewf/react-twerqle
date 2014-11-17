@@ -95,7 +95,7 @@ var Game = React.createClass({
             this.setState({
                 game: game, 
                 gameMessage: "You scored " + success + " points"
-            }, this.routeGame());
+            }, this.routeGame);
         }
         
     },
@@ -117,7 +117,7 @@ var Game = React.createClass({
                         game: this.state.game, 
                         gameMessage: success + " tiles exchanged",
                         exchangeTiles: []
-                    }, this.routeGame());
+                    }, this.routeGame);
                 }
             }
         } else {
@@ -191,7 +191,7 @@ var Game = React.createClass({
             this.setState({
                 game: this.state.game,
                 gameMessage: gameMessage
-            }, this.routeGame());
+            }, this.routeGame);
 
         }.bind(this), playSpeed);
     },        
