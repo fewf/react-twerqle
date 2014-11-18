@@ -4,6 +4,7 @@ window.app = {};
 app.twq = require('./../twerqle/adaptor');
 var UIRoot = require('./UIRoot');
 var React = require('react');
+window.interact = require('./../interact-1.1.2');
 
 // Not using Routes at the moment. 
 // Keeping this in place for later possible usage.
