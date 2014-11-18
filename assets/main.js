@@ -14657,7 +14657,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "#boardContainer {\n    height: 100%;\n    width: 100%;\n    position: fixed;\n    left:0;\n    width:0;\n}\n#boardContainer #boardControls {\n    position: fixed;\n    right: 0;\n    top:  0;\n}            ", ""]);
+	exports.push([module.id, "#boardContainer {\n    height: 100%;\n    width: 100%;\n    position: fixed;\n    left:0;\n    width:0;\n}\n#boardContainer #board-zoom {\n    position: fixed;\n    right: 0;\n    top:  0;\n}\n#board-movers {\n\tposition: fixed;\n    left: 0;\n    top:  50%;\n    font-size: 40px;\n}", ""]);
 
 /***/ },
 /* 95 */
@@ -14678,7 +14678,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "#player-controls-and-game-data {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\n}\n#player-controls-and-game-data > div {\n\tdisplay: inline-block;\n\tfloat:left;\n}", ""]);
+	exports.push([module.id, "#player-controls-and-game-data {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\n}\n#player-controls-and-game-data > div {\n\tdisplay: inline-block;\n\tfloat:left;\n}\n", ""]);
 
 /***/ },
 /* 98 */
@@ -14713,7 +14713,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 400px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 275px;\n\tmargin: 0 1em;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.player-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n\t/*width: 30%;*/\n}\n.player-buttons a {\n\tcursor: pointer;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
+	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 400px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 240px;\n\tmargin: 0 1em;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.player-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n}\n.player-buttons a {\n\tcursor: pointer;\n\tmargin: 5px;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
 
 /***/ },
 /* 103 */
@@ -14796,6 +14796,16 @@
 	    zoomOut: function() {
 	        this.setState({cellSize: this.state.cellSize - 5});
 	    },
+	    moveLeft: function(e) {
+	        this.intervalId = window.setInterval(function() {
+	            var $board = this.refs.boardSVG.getDOMNode();
+	            var leftNum = Number($board.style.left.substr(0, $board.style.left.length - 2));
+	            $board.style.left = leftNum + 1;
+	        }.bind(this), 20);
+	    },
+	    killMove: function(e) {
+	        clearInterval(this.intervalId);
+	    },
 	    render: function() {
 	        var cellSize = this.state.cellSize;
 
@@ -14808,8 +14818,9 @@
 	                          playableCoordDragEnter: this.props.playableCoordDragEnter, 
 	                          playableCoordDragLeave: this.props.playableCoordDragLeave, 
 	                          minX: this.state.minX, 
-	                          minY: this.state.minY}), 
-	                React.DOM.div({id: "boardControls"}, 
+	                          minY: this.state.minY, 
+	                          ref: "boardSVG"}), 
+	                React.DOM.div({id: "board-zoom"}, 
 	                    React.DOM.button({disabled: cellSize >= 70 ? "disabled" : "", onClick: this.zoomIn}, 
 	                        React.DOM.svg({height: "48", width: "48"}, 
 	                            React.DOM.g({transform: "scale(0.5)"}, 
@@ -14826,6 +14837,9 @@
 	                            )
 	                        )
 	                    )
+	                ), 
+	                React.DOM.div({id: "board-movers"}, 
+	                    React.DOM.a({id: "board-move-left", onMouseOver: this.moveLeft, onMouseLeave: this.killMove}, "<")
 	                )
 	            )
 	            )
@@ -14870,6 +14884,9 @@
 	                 prevCellSize: this.props.cellSize,
 	                 maxDimensions: maxDimensions
 	               }
+	    },
+	    dragBoard: function(e) {
+
 	    },
 	    render: function() {
 	        var tilePlacements = this.props.tilePlacements.map(function(tp) {
@@ -14926,14 +14943,24 @@
 	                )
 
 	            )
-	            );
+	        );
 	    },
 	    componentDidMount: function() {
-	        var comp = this;
-	        $(this.getDOMNode()).draggable({
-	            stop: function(e, ui) {
-	                comp.setState({left: ui.position.left, 
-	                               top: ui.position.top});
+	        interact('#boardSVG').draggable({
+	            onmove: function (event) {
+	                var target = event.target,
+	                    // keep the dragged position in the data-x/data-y attributes
+	                    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+	                    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+	                // translate the element
+	                target.style.webkitTransform =
+	                target.style.transform =
+	                    'translate(' + x + 'px, ' + y + 'px)';
+
+	                // update the posiion attributes
+	                target.setAttribute('data-x', x);
+	                target.setAttribute('data-y', y);
 	            }
 	        });
 	    },
@@ -15056,6 +15083,8 @@
 	                    playableCoordDragEnter: this.playableCoordDragEnter, 
 	                    playableCoordDragLeave: this.playableCoordDragLeave, 
 	                    playableCoordClick: this.playableCoordClick}), 
+
+	                GameDataView({game: this.state.game}), 
 	                PlayerControls({
 	                    player: humanPlayer, 
 	                    turnHistory: this.state.game.turnHistory, 
@@ -15068,8 +15097,7 @@
 	                    handleExchange: this.handleExchange, 
 	                    handleTurnReset: this.handleTurnReset, 
 	                    playerTileDragStart: this.playerTileDragStart, 
-	                    playerTileDragEnd: this.playerTileDragEnd}), 
-	                GameDataView({game: this.state.game})
+	                    playerTileDragEnd: this.playerTileDragEnd})
 	            )
 	            )                    
 	    },
@@ -15500,6 +15528,7 @@
 	        return (
 	                React.DOM.li({'data-id': this.props.id, 
 	                    key: this.props.key, 
+	                    title: "Drag me to the board.", 
 	                    className: "player-tile", 
 	                    onClick: this.click, 
 	                    draggable: this.props.exchangeTiles ? "" : "true", 
@@ -15509,7 +15538,7 @@
 	                    onDragEnter: this.props.dragEnter, 
 	                    onDragOver: this.props.dragOver, 
 	                    onDrop: this.props.drop}, 
-	                    React.DOM.svg({xmlns: "http://www.w3.org/2000/svg", version: "1.1", width: "50", height: "50"}, 
+	                    React.DOM.svg({version: "1.1", width: "50", height: "50"}, 
 	                        Tile({tile: this.props.tile, selected: selected, isExchangeTile: isExchangeTile})
 	                    )
 	                )
@@ -15557,14 +15586,9 @@
 	        this.dragged = e.currentTarget;
 	        this.dragged.style.opacity = 0.75;
 	        e.dataTransfer.effectAllowed = 'move';
-	        // Firefox requires dataTransfer data to be set
 	        e.dataTransfer.setData("text/html", this.state.orderedTiles[this.dragged.dataset.id]);
 	    },
 	    tileDrag: function(e) {      
-	        // if (!this.dragged.parentNode.children.namedItem("placeholder")) {
-	        //     this.over = e.currentTarget;
-	        //     this.over.parentNode.insertBefore(this.state.placeholder, this.over);
-	        // }
 	        this.dragged.style.display = "none";
 	    },
 	    tileDragEnd: function(e) {
