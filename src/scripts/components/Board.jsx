@@ -35,8 +35,7 @@ var Board = React.createClass({
         return (
             <div id="boardContainer">
                 <BoardSVG cellSize={cellSize}
-                          tilePlacements={this.props.tilePlacements}
-                          playableCoords={this.props.playableCoords}
+                          game={this.props.game}
                           playableCoordClick={this.props.playableCoordClick}
                           playableCoordDragEnter={this.props.playableCoordDragEnter}
                           playableCoordDragLeave={this.props.playableCoordDragLeave}

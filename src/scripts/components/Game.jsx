@@ -32,11 +32,8 @@ var Game = React.createClass({
         return (
             <div id="game-root">
                 
-
-
                 <Board 
-                    tilePlacements={tilePlacements} 
-                    playableCoords={playableCoords} 
+                    game={this.state.game}
                     playableCoordDragEnter={this.playableCoordDragEnter}
                     playableCoordDragLeave={this.playableCoordDragLeave}
                     playableCoordClick={this.playableCoordClick} />

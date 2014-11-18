@@ -12,29 +12,22 @@ require('../../styles/BoardSVG.css');
 
 var BoardSVG = React.createClass({
     getInitialState: function() {
-        var windowDims = adaptor.getScreenDims();
-        var cellSize = this.props.cellSize;
-        var maxDimensions = app.game ? 
-                                (app.game.numTypes - 1)*app.game.numTypes*app.game.copies + 1
-                                : 200;
-        var svgLength = maxDimensions * cellSize;
-        var centerCell = (svgLength - cellSize)/2;
-        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
-        var left = -1 * (svgLength/2 - windowDims.x/2);
-        var top = -1 * (svgLength/2 - windowDims.y/2);
+        return {
+            prevCellSize: this.props.cellSize
+        }
 
-        return { 
-                 left: left, 
-                 top: top,
-                 prevCellSize: this.props.cellSize,
-                 maxDimensions: maxDimensions
-               }
+        // return { 
+        //          left: left, 
+        //          top: top,
+        //          prevCellSize: this.props.cellSize,
+        //          maxDimensions: maxDimensions
+        //        }
     },
     dragBoard: function(e) {
 
     },
     render: function() {
-        var tilePlacements = this.props.tilePlacements.map(function(tp) {
+        var tilePlacements = this.props.game.tilePlacements().map(function(tp) {
             return (
                     <TilePlacement 
                         key={String(tp.tile) + tp.coords.x + tp.coords.y}
@@ -44,7 +37,7 @@ var BoardSVG = React.createClass({
                 );
         }, this);
 
-        var playableCoords = this.props.playableCoords.map(function(pc) {
+        var playableCoords = this.props.game.playable().map(function(pc) {
             return (
                     <PlayableCoord 
                         key={String(pc.x) + pc.y}
@@ -58,17 +51,11 @@ var BoardSVG = React.createClass({
         }, this);
 
         var cellSize = this.props.cellSize;
-        var svgLength = this.state.maxDimensions * cellSize;
-        var centerCell = (svgLength - cellSize)/2;
-        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
 
         return (
             <svg id="boardSVG" 
                  xmlns="http://www.w3.org/2000/svg" 
-                 version="1.1" 
-                 width={svgLength} 
-                 height={svgLength}
-                 style={{top: this.state.top, left: this.state.left}}>
+                 version="1.1" >
                 <defs> 
                     <pattern id="grid" width={cellSize*2} height={cellSize*2} patternUnits="userSpaceOnUse">
                         <rect fill="LightGray" x="0" y="0" width={cellSize} height={cellSize} />
@@ -79,18 +66,37 @@ var BoardSVG = React.createClass({
                 </defs>
                 <g id="boardGroup">
                     <rect fill="url(#grid)" x="0" y="0" width="100%" height="100%" />
-                    <g transform={transform}>
+                    <g ref="boardObjects">
                         {tilePlacements}
                         {playableCoords}
                     </g>
-                    <line x1="2275" y1="0" x2="2275" y2="4550" strokeWidth="00" stroke="red" />
-                    <line x1="0" y1="2275" x2="4550" y2="2275" strokeWidth="00" stroke="red" />
                 </g>
 
             </svg>
         );
     },
     componentDidMount: function() {
+        var windowDims = adaptor.getScreenDims();
+        var cellSize = this.props.cellSize;
+
+        var game = this.props.game;
+
+        var maxDimensions = (game.numTypes - 1)*game.numTypes*game.copies + 1
+        var svgLength = maxDimensions * cellSize;
+        var centerCell = (svgLength - cellSize)/2;
+        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
+        var left = -1 * (svgLength/2 - windowDims.x/2);
+        var top = -1 * (svgLength/2 - windowDims.y/2);
+
+        $board = this.getDOMNode();
+        $boardObjects = this.refs.boardObjects.getDOMNode();
+
+        $board.style.left = left;
+        $board.style.top = top;
+
+        $board.style.width = $board.style.height = svgLength;
+        $boardObjects.setAttribute("transform", transform);
+
         interact('#boardSVG').draggable({
             onmove: function (event) {
                 var target = event.target,
@@ -110,12 +116,12 @@ var BoardSVG = React.createClass({
         });
     },
     componentWillReceiveProps: function(nextProps) {
-        var windowDims = adaptor.getScreenDims();
-        var wh = windowDims.y;
-        var ww = windowDims.x;
-        var top = wh/2 - ((wh/2 - this.state.top) * (nextProps.cellSize/this.props.cellSize));
-        var left = ww/2 - ((ww/2 - this.state.left) * (nextProps.cellSize/this.props.cellSize));
-        this.setState({left: left, top: top});
+        // var windowDims = adaptor.getScreenDims();
+        // var wh = windowDims.y;
+        // var ww = windowDims.x;
+        // var top = wh/2 - ((wh/2 - this.state.top) * (nextProps.cellSize/this.props.cellSize));
+        // var left = ww/2 - ((ww/2 - this.state.left) * (nextProps.cellSize/this.props.cellSize));
+        // this.setState({left: left, top: top});
     }
 });
 
