@@ -11,21 +11,6 @@ var adaptor = require('../twerqle/adaptor');
 require('../../styles/BoardSVG.css');
 
 var BoardSVG = React.createClass({
-    getInitialState: function() {
-        return {
-            prevCellSize: this.props.cellSize
-        }
-
-        // return { 
-        //          left: left, 
-        //          top: top,
-        //          prevCellSize: this.props.cellSize,
-        //          maxDimensions: maxDimensions
-        //        }
-    },
-    dragBoard: function(e) {
-
-    },
     render: function() {
         var tilePlacements = this.props.game.tilePlacements().map(function(tp) {
             return (
@@ -114,14 +99,6 @@ var BoardSVG = React.createClass({
                 target.setAttribute('data-y', y);
             }
         });
-    },
-    componentWillReceiveProps: function(nextProps) {
-        // var windowDims = adaptor.getScreenDims();
-        // var wh = windowDims.y;
-        // var ww = windowDims.x;
-        // var top = wh/2 - ((wh/2 - this.state.top) * (nextProps.cellSize/this.props.cellSize));
-        // var left = ww/2 - ((ww/2 - this.state.left) * (nextProps.cellSize/this.props.cellSize));
-        // this.setState({left: left, top: top});
     }
 });
 
