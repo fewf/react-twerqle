@@ -40,6 +40,8 @@ var Game = React.createClass({
                     playableCoordDragEnter={this.playableCoordDragEnter}
                     playableCoordDragLeave={this.playableCoordDragLeave}
                     playableCoordClick={this.playableCoordClick} />
+
+                <GameDataView game={this.state.game} />                    
                 <PlayerControls 
                     player={humanPlayer}
                     turnHistory={this.state.game.turnHistory}
@@ -53,7 +55,6 @@ var Game = React.createClass({
                     handleTurnReset={this.handleTurnReset}
                     playerTileDragStart={this.playerTileDragStart}
                     playerTileDragEnd={this.playerTileDragEnd} />
-                <GameDataView game={this.state.game} />
             </div>
             )                    
     },

@@ -16,7 +16,7 @@
 .playerControls div p {
 	font-family: monospace;
 	display: inline-block;
-	width: 275px;
+	width: 240px;
 	margin: 0 1em;
 	text-align: center;
 	background-color: rgba(255,255,255,.8);
@@ -26,10 +26,10 @@
 	position: absolute;
 	right: 0;
 	bottom: 0;
-	/*width: 30%;*/
 }
 .player-buttons a {
 	cursor: pointer;
+	margin: 5px;
 }
 .player-buttons a svg circle {
 	fill: lightgreen;

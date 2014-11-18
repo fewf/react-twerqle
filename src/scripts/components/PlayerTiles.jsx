@@ -24,14 +24,9 @@ var PlayerTiles = React.createClass({
         this.dragged = e.currentTarget;
         this.dragged.style.opacity = 0.75;
         e.dataTransfer.effectAllowed = 'move';
-        // Firefox requires dataTransfer data to be set
         e.dataTransfer.setData("text/html", this.state.orderedTiles[this.dragged.dataset.id]);
     },
     tileDrag: function(e) {      
-        // if (!this.dragged.parentNode.children.namedItem("placeholder")) {
-        //     this.over = e.currentTarget;
-        //     this.over.parentNode.insertBefore(this.state.placeholder, this.over);
-        // }
         this.dragged.style.display = "none";
     },
     tileDragEnd: function(e) {

@@ -30,6 +30,9 @@ var BoardSVG = React.createClass({
                  maxDimensions: maxDimensions
                }
     },
+    dragBoard: function(e) {
+
+    },
     render: function() {
         var tilePlacements = this.props.tilePlacements.map(function(tp) {
             return (
@@ -65,7 +68,7 @@ var BoardSVG = React.createClass({
                  version="1.1" 
                  width={svgLength} 
                  height={svgLength}
-                 style={{top: this.state.top, left: this.state.left}} >
+                 style={{top: this.state.top, left: this.state.left}}>
                 <defs> 
                     <pattern id="grid" width={cellSize*2} height={cellSize*2} patternUnits="userSpaceOnUse">
                         <rect fill="LightGray" x="0" y="0" width={cellSize} height={cellSize} />
@@ -85,16 +88,16 @@ var BoardSVG = React.createClass({
                 </g>
 
             </svg>
-            );
+        );
     },
     componentDidMount: function() {
-        var comp = this;
-        $(this.getDOMNode()).draggable({
-            stop: function(e, ui) {
-                comp.setState({left: ui.position.left, 
-                               top: ui.position.top});
-            }
-        });
+        // var comp = this;
+        // $(this.getDOMNode()).draggable({
+        //     stop: function(e, ui) {
+        //         comp.setState({left: ui.position.left, 
+        //                        top: ui.position.top});
+        //     }
+        // });
     },
     componentWillReceiveProps: function(nextProps) {
         var windowDims = adaptor.getScreenDims();
