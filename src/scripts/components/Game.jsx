@@ -144,13 +144,13 @@ var Game = React.createClass({
         this.setState({selectedTile: null, gameMessage: ""});
     },        
     playableCoordDragEnter: function(playableCoord, e) {
-        this.over = playableCoord;
         if (this.state.game.board.placeTileValidate(playableCoord.props.coords, this.state.selectedTile.props.tile)) {
+            this.over = playableCoord;
             playableCoord.getDOMNode().classList.add("play-validated");
         }
     },
     playableCoordDragLeave: function(playableCoord, e) {
-        if (e.currentTarget === this.over) this.over = null;
+        if (playableCoord === this.over) this.over = null;
         playableCoord.getDOMNode().classList.remove("play-validated");
     },
     routeGame: function() {
