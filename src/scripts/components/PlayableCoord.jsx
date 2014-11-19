@@ -24,24 +24,11 @@ var PlayableCoord = React.createClass({
                     width="100"
                     height="100"
                     className={cls}
-                    onClick={this.handleClick} 
-                    onDragOver={this.dragOver}
-                    onDragLeave={this.dragLeave}
-                    onDragEnter={this.dragEnter} />
+                    onClick={this.handleClick} />
             )
     },
     handleClick: function() {
         this.props.playableCoordClick(this);
-    },
-    dragOver: function(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-    },                
-    dragEnter: function(e) {
-        this.props.playableCoordDragEnter(this, e);
-    },
-    dragLeave: function(e) {
-        this.props.playableCoordDragLeave(this, e);
     }
 });
 

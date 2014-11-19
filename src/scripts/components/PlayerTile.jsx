@@ -17,14 +17,7 @@ var PlayerTile = React.createClass({
                     key={this.props.key} 
                     title="Drag me to the board."
                     className="player-tile" 
-                    onClick={this.click} 
-                    draggable={this.props.exchangeTiles ? "" : "true"}
-                    onDrag={this.props.drag}
-                    onDragEnd={this.props.dragEnd} 
-                    onDragStart={this.dragStart}
-                    onDragEnter={this.props.dragEnter}
-                    onDragOver={this.props.dragOver} 
-                    onDrop={this.props.drop} >
+                    onClick={this.click} >
                     <svg version="1.1" width="50" height="50">
                         <Tile tile={this.props.tile} selected={selected} isExchangeTile={isExchangeTile} />
                     </svg>

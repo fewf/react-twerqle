@@ -10,8 +10,10 @@ require('../../styles/Board.css');
 
 var Board = React.createClass({
     getInitialState: function() {
-        return { cellSize: 50,
-                 center: true };
+        return { 
+            cellSize: 50,
+            center: true 
+        };
     },
     zoomIn: function() {
         this.setState({cellSize: this.state.cellSize + 5});
@@ -19,31 +21,24 @@ var Board = React.createClass({
     zoomOut: function() {
         this.setState({cellSize: this.state.cellSize - 5});
     },
-    moveLeft: function(e) {
-        this.intervalId = window.setInterval(function() {
-            var $board = this.refs.boardSVG.getDOMNode();
-            var leftNum = Number($board.style.left.substr(0, $board.style.left.length - 2));
-            $board.style.left = leftNum + 1;
-        }.bind(this), 20);
-    },
-    killMove: function(e) {
-        clearInterval(this.intervalId);
-    },
     render: function() {
         var cellSize = this.state.cellSize;
 
         return (
             <div id="boardContainer">
-                <BoardSVG cellSize={cellSize}
-                          game={this.props.game}
-                          playableCoordClick={this.props.playableCoordClick}
-                          playableCoordDragEnter={this.props.playableCoordDragEnter}
-                          playableCoordDragLeave={this.props.playableCoordDragLeave}
-                          minX = {this.state.minX} 
-                          minY = {this.state.minY}
-                          ref="boardSVG" />
+                <BoardSVG
+                    cellSize={cellSize}
+                    game={this.props.game}
+                    playableCoordClick={this.props.playableCoordClick}
+                    playableCoordDragEnter={this.props.playableCoordDragEnter}
+                    playableCoordDragLeave={this.props.playableCoordDragLeave}
+                    minX = {this.state.minX} 
+                    minY = {this.state.minY}
+                    ref="boardSVG" />
                 <div id="board-zoom">
-                    <button disabled={cellSize >= 70 ? "disabled" : ""} onClick={this.zoomIn}>
+                    <button
+                        disabled={cellSize >= 70 ? "disabled" : ""}
+                        onClick={this.zoomIn}>
                         <svg height="48" width="48">
                             <g transform="scale(0.5)">
                                 <path d="M90.829,85.171L68.121,62.464C73.047,56.307,76,48.5,76,40C76,20.118,59.882,4,40,4C20.118,4,4,20.118,4,40s16.118,36,36,36  c8.5,0,16.306-2.953,22.464-7.879l22.708,22.708c1.562,1.562,4.095,1.562,5.657,0C92.391,89.267,92.391,86.733,90.829,85.171z   M40,68c-15.464,0-28-12.536-28-28s12.536-28,28-28c15.464,0,28,12.536,28,28S55.464,68,40,68z"/>
@@ -51,7 +46,9 @@ var Board = React.createClass({
                             </g>
                         </svg>
                     </button>
-                    <button disabled={cellSize <= 10 ? "disabled" : ""} onClick={this.zoomOut}>
+                    <button
+                        disabled={cellSize <= 10 ? "disabled" : ""} 
+                        onClick={this.zoomOut}>
                         <svg height="48" width="48">                       
                             <g transform="scale(0.5)">
                                 <path d="M90.829,85.171L68.121,62.464C73.047,56.307,76,48.5,76,40C76,20.118,59.882,4,40,4C20.118,4,4,20.118,4,40s16.118,36,36,36  c8.5,0,16.306-2.953,22.464-7.879l22.708,22.708c1.562,1.562,4.095,1.562,5.657,0C92.391,89.267,92.391,86.733,90.829,85.171z   M40,68c-15.464,0-28-12.536-28-28s12.536-28,28-28c15.464,0,28,12.536,28,28S55.464,68,40,68z"/>
@@ -59,9 +56,6 @@ var Board = React.createClass({
                             </g>
                         </svg>
                     </button>
-                </div>
-                <div id="board-movers">
-                    <a id="board-move-left" onMouseOver={this.moveLeft} onMouseLeave={this.killMove}>&lt;</a>
                 </div>
             </div>
             )

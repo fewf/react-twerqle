@@ -20,67 +20,60 @@ var PlayerTiles = React.createClass({
             orderedTiles: this.props.tiles.slice()
         }
     },
-    tileDragStart: function(e) {
-        this.dragged = e.currentTarget;
-        this.dragged.style.opacity = 0.75;
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData("text/html", this.state.orderedTiles[this.dragged.dataset.id]);
-    },
-    tileDrag: function(e) {      
-        this.dragged.style.display = "none";
-    },
-    tileDragEnd: function(e) {
-        this.dragged.style.opacity = 1;
-        this.dragged.style.display = "inline-block"
-        if (this.dragged.parentNode.children.namedItem("placeholder")) {
-            this.dragged.parentNode.removeChild(this.state.placeholder);
-        }
-        this.over = null;                    
+    // tileDragStart: function(e) {
+    //     this.dragged = e.currentTarget;
+    //     this.dragged.style.opacity = 0.75;
+    //     e.dataTransfer.effectAllowed = 'move';
+    //     e.dataTransfer.setData("text/html", this.state.orderedTiles[this.dragged.dataset.id]);
+    // },
+    // tileDrag: function(e) {      
+    //     this.dragged.style.display = "none";
+    // },
+    // tileDragEnd: function(e) {
+    //     this.dragged.style.opacity = 1;
+    //     this.dragged.style.display = "inline-block"
+    //     if (this.dragged.parentNode.children.namedItem("placeholder")) {
+    //         this.dragged.parentNode.removeChild(this.state.placeholder);
+    //     }
+    //     this.over = null;                    
 
-        this.props.playerTileDragEnd(e.currentTarget);
-    },
-    tileDragOver: function(e) {
-        e.preventDefault();
-        if(e.currentTarget.id == "placeholder") return; 
-        this.over = e.currentTarget;
-        this.over.parentNode.insertBefore(this.state.placeholder, this.over);
-    },
-    rackDragEnter:function(e) {
-        e.preventDefault();
-    },
-    rackDragOver: function(e) {
-        e.preventDefault();
-    },
-    rackDrop: function(e) {
-        if (this.over) {
-            var data = this.state.orderedTiles;
-            var from = Number(this.dragged.dataset.id);
-            var to = Number(this.over.dataset.id);
-            if(from < to) to--;
-            data.splice(to, 0, data.splice(from, 1)[0]);
-            this.setState({orderedTiles: data});
-        }
-    },
+    //     this.props.playerTileDragEnd(e.currentTarget);
+    // },
+    // tileDragOver: function(e) {
+    //     e.preventDefault();
+    //     if(e.currentTarget.id == "placeholder") return; 
+    //     this.over = e.currentTarget;
+    //     this.over.parentNode.insertBefore(this.state.placeholder, this.over);
+    // },
+    // rackDragEnter:function(e) {
+    //     e.preventDefault();
+    // },
+    // rackDragOver: function(e) {
+    //     e.preventDefault();
+    // },
+    // rackDrop: function(e) {
+    //     if (this.over) {
+    //         var data = this.state.orderedTiles;
+    //         var from = Number(this.dragged.dataset.id);
+    //         var to = Number(this.over.dataset.id);
+    //         if(from < to) to--;
+    //         data.splice(to, 0, data.splice(from, 1)[0]);
+    //         this.setState({orderedTiles: data});
+    //     }
+    // },
     render: function() {
         var tiles = this.state.orderedTiles.map(function (tile, i) {
-            return (<PlayerTile id={i}
-                                key={i}
-                                tile={tile} 
-                                selectedTile={this.props.selectedTile}
-                                exchangeTiles={this.props.exchangeTiles}
-                                playerTileSelect={this.props.playerTileSelect}
-                                playerTileDragStart={this.props.playerTileDragStart}
-                                dragEnd={this.tileDragEnd}
-                                dragStart={this.tileDragStart} 
-                                dragOver={this.tileDragOver}
-                                dragEnter={this.tileDragEnter}
-                                drag={this.tileDrag}
-                                drop={this.tileDrop} />)
+            return (
+                <PlayerTile
+                    id={i}
+                    key={i}
+                    tile={tile} 
+                    selectedTile={this.props.selectedTile}
+                    exchangeTiles={this.props.exchangeTiles}
+                    playerTileSelect={this.props.playerTileSelect} />
+            )
         }, this);
-        return (<ul id="rack" onDragLeave={this.rackDragLeave} 
-                              onDrop={this.rackDrop} 
-                              onDragOver={this.rackDragOver} 
-                              onDragEnter={this.rackDragEnter}>
+        return (<ul id="rack">
                     {tiles}
                 </ul>);
     },
@@ -100,6 +93,43 @@ var PlayerTiles = React.createClass({
 
         var reconciled = reconciled.concat(propTiles);
         this.setState({orderedTiles: reconciled});
+    },
+    componentDidMount: function() {
+        interact('.player-tile')
+            .draggable({
+                // allow dragging of multple elements at the same time
+                max: 1,
+
+                onstart: function (event) {
+
+                },
+                // call this function on every dragmove event
+                onmove: function (event) {
+                    var target = event.target,
+                        // keep the dragged position in the data-x/data-y attributes
+                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                    // translate the element
+                    target.style.webkitTransform =
+                    target.style.transform =
+                        'translate(' + x + 'px, ' + y + 'px)';
+
+                    // update the posiion attributes
+                    target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                },
+                // call this function on every dragend event
+                onend: function (event) {
+                    console.log('hi');
+                    // var textEl = event.target.querySelector('p');
+                    
+                    // textEl && (textEl.textContent =
+                    //     'moved a distance of '
+                    //     + (Math.sqrt(event.dx * event.dx +
+                    //                  event.dy * event.dy)|0) + 'px');
+                }
+            })
     }
 });
 
