@@ -61,9 +61,6 @@ var Board = React.createClass({
                         </svg>
                     </button>
                 </div>
-                <div id="board-movers">
-                    <a id="board-move-left" onMouseOver={this.moveLeft} onMouseLeave={this.killMove}>&lt;</a>
-                </div>
             </div>
             )
     }
