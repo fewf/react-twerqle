@@ -14953,7 +14953,7 @@
 	        var left = -1 * (svgLength/2 - windowDims.x/2);
 	        var top = -1 * (svgLength/2 - windowDims.y/2);
 
-	        $board = this.getDOMNode();
+	        var $board = this.getDOMNode();
 	        $boardObjects = this.refs.boardObjects.getDOMNode();
 
 	        $board.style.left = left;
