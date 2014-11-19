@@ -105,7 +105,7 @@ var BoardSVG = React.createClass({
         var top = -1 * (svgLength/2 - windowDims.y/2);
 
         var $board = this.getDOMNode();
-        $boardObjects = this.refs.boardObjects.getDOMNode();
+        var $boardObjects = this.refs.boardObjects.getDOMNode();
 
         $board.style.left = left;
         $board.style.top = top;
