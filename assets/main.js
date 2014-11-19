@@ -14943,13 +14943,13 @@
 	        );
 	    },
 	    componentDidMount: function() {
-	        // var comp = this;
-	        // $(this.getDOMNode()).draggable({
-	        //     stop: function(e, ui) {
-	        //         comp.setState({left: ui.position.left, 
-	        //                        top: ui.position.top});
-	        //     }
-	        // });
+	        var comp = this;
+	        $(this.getDOMNode()).draggable({
+	            stop: function(e, ui) {
+	                comp.setState({left: ui.position.left, 
+	                               top: ui.position.top});
+	            }
+	        });
 	    },
 	    componentWillReceiveProps: function(nextProps) {
 	        var windowDims = adaptor.getScreenDims();
