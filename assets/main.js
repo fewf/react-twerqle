@@ -14658,7 +14658,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "#boardContainer {\n    height: 100%;\n    width: 100%;\n    position: fixed;\n    left:0;\n    width:0;\n}\n#boardContainer #board-zoom {\n    position: fixed;\n    right: 0;\n    top:  0;\n}\n#board-movers {\n\tposition: fixed;\n    left: 0;\n    top:  50%;\n    font-size: 40px;\n}", ""]);
+	exports.push([module.id, "#boardContainer {\n    height: 100%;\n    width: 100%;\n    position: fixed;\n    left:0;\n    width:0;\n}\n#boardContainer #board-zoom {\n    position: fixed;\n    right: 0;\n    top:  0;\n}\n#board-movers {\n\tposition: fixed;\n    left: 0;\n    top:  50%;\n    font-size: 40px;\n}\n\n\n\n.dropzone {\n    background-color: #ccc;\n    border: dashed 4px transparent;\n    border-radius: 4px;\n    margin: 10px auto 30px;\n    padding: 10px;\n    width: 80%;\n    transition: background-color 0.3s, border-color 0.3s;\n}\n\n.drop-active {\n    border-color: #666;\n}\n\n.drop-target {\n    background-color: #29e;\n}\n\n.drag-drop {\n    display: inline-block;\n    min-width: 40px;\n    padding: 2em 0.5em;\n\n    background-color: #99e;\n    border: solid 2px white;\n\n    transition: background-color 0.3s;\n}\n\n.drag-drop.can-drop { background-color: #4e4; }", ""]);
 
 /***/ },
 /* 95 */
@@ -14788,8 +14788,10 @@
 
 	var Board = React.createClass({displayName: 'Board',
 	    getInitialState: function() {
-	        return { cellSize: 50,
-	                 center: true };
+	        return { 
+	            cellSize: 50,
+	            center: true 
+	        };
 	    },
 	    zoomIn: function() {
 	        this.setState({cellSize: this.state.cellSize + 5});
@@ -14797,32 +14799,24 @@
 	    zoomOut: function() {
 	        this.setState({cellSize: this.state.cellSize - 5});
 	    },
-	    moveLeft: function(e) {
-	        this.intervalId = window.setInterval(function() {
-	            var $board = this.refs.boardSVG.getDOMNode();
-	            var leftNum = Number($board.style.left.substr(0, $board.style.left.length - 2));
-	            $board.style.left = leftNum + 1;
-	        }.bind(this), 20);
-	    },
-	    killMove: function(e) {
-	        clearInterval(this.intervalId);
-	    },
 	    render: function() {
 	        var cellSize = this.state.cellSize;
 
 	        return (
 	            React.DOM.div({id: "boardContainer"}, 
-	                BoardSVG({cellSize: cellSize, 
-	                          tilePlacements: this.props.tilePlacements, 
-	                          playableCoords: this.props.playableCoords, 
-	                          playableCoordClick: this.props.playableCoordClick, 
-	                          playableCoordDragEnter: this.props.playableCoordDragEnter, 
-	                          playableCoordDragLeave: this.props.playableCoordDragLeave, 
-	                          minX: this.state.minX, 
-	                          minY: this.state.minY, 
-	                          ref: "boardSVG"}), 
+	                BoardSVG({
+	                    cellSize: cellSize, 
+	                    game: this.props.game, 
+	                    playableCoordClick: this.props.playableCoordClick, 
+	                    playableCoordDragEnter: this.props.playableCoordDragEnter, 
+	                    playableCoordDragLeave: this.props.playableCoordDragLeave, 
+	                    minX: this.state.minX, 
+	                    minY: this.state.minY, 
+	                    ref: "boardSVG"}), 
 	                React.DOM.div({id: "board-zoom"}, 
-	                    React.DOM.button({disabled: cellSize >= 70 ? "disabled" : "", onClick: this.zoomIn}, 
+	                    React.DOM.button({
+	                        disabled: cellSize >= 70 ? "disabled" : "", 
+	                        onClick: this.zoomIn}, 
 	                        React.DOM.svg({height: "48", width: "48"}, 
 	                            React.DOM.g({transform: "scale(0.5)"}, 
 	                                React.DOM.path({d: "M90.829,85.171L68.121,62.464C73.047,56.307,76,48.5,76,40C76,20.118,59.882,4,40,4C20.118,4,4,20.118,4,40s16.118,36,36,36  c8.5,0,16.306-2.953,22.464-7.879l22.708,22.708c1.562,1.562,4.095,1.562,5.657,0C92.391,89.267,92.391,86.733,90.829,85.171z   M40,68c-15.464,0-28-12.536-28-28s12.536-28,28-28c15.464,0,28,12.536,28,28S55.464,68,40,68z"}), 
@@ -14830,7 +14824,9 @@
 	                            )
 	                        )
 	                    ), 
-	                    React.DOM.button({disabled: cellSize <= 10 ? "disabled" : "", onClick: this.zoomOut}, 
+	                    React.DOM.button({
+	                        disabled: cellSize <= 10 ? "disabled" : "", 
+	                        onClick: this.zoomOut}, 
 	                        React.DOM.svg({height: "48", width: "48"}, 
 	                            React.DOM.g({transform: "scale(0.5)"}, 
 	                                React.DOM.path({d: "M90.829,85.171L68.121,62.464C73.047,56.307,76,48.5,76,40C76,20.118,59.882,4,40,4C20.118,4,4,20.118,4,40s16.118,36,36,36  c8.5,0,16.306-2.953,22.464-7.879l22.708,22.708c1.562,1.562,4.095,1.562,5.657,0C92.391,89.267,92.391,86.733,90.829,85.171z   M40,68c-15.464,0-28-12.536-28-28s12.536-28,28-28c15.464,0,28,12.536,28,28S55.464,68,40,68z"}), 
@@ -14838,9 +14834,6 @@
 	                            )
 	                        )
 	                    )
-	                ), 
-	                React.DOM.div({id: "board-movers"}, 
-	                    React.DOM.a({id: "board-move-left", onMouseOver: this.moveLeft, onMouseLeave: this.killMove}, "<")
 	                )
 	            )
 	            )
@@ -14867,46 +14860,22 @@
 	__webpack_require__(200);
 
 	var BoardSVG = React.createClass({displayName: 'BoardSVG',
-	    getInitialState: function() {
-	        var windowDims = adaptor.getScreenDims();
-	        var cellSize = this.props.cellSize;
-	        var maxDimensions = app.game ? 
-	                                (app.game.numTypes - 1)*app.game.numTypes*app.game.copies + 1
-	                                : 200;
-	        var svgLength = maxDimensions * cellSize;
-	        var centerCell = (svgLength - cellSize)/2;
-	        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
-	        var left = -1 * (svgLength/2 - windowDims.x/2);
-	        var top = -1 * (svgLength/2 - windowDims.y/2);
-
-	        return { 
-	                 left: left, 
-	                 top: top,
-	                 prevCellSize: this.props.cellSize,
-	                 maxDimensions: maxDimensions
-	               }
-	    },
-	    dragBoard: function(e) {
-
-	    },
 	    render: function() {
-	        var tilePlacements = this.props.tilePlacements.map(function(tp) {
+	        var tilePlacements = this.props.game.tilePlacements().map(function(tp) {
 	            return (
 	                    TilePlacement({
 	                        key: String(tp.tile) + tp.coords.x + tp.coords.y, 
 	                        tilePlacement: tp, 
-	                        cellSize: this.props.cellSize, 
-	                        maxDimensions: this.state.maxDimensions})
+	                        cellSize: this.props.cellSize})
 	                );
 	        }, this);
 
-	        var playableCoords = this.props.playableCoords.map(function(pc) {
+	        var playableCoords = this.props.game.playable().map(function(pc) {
 	            return (
 	                    PlayableCoord({
 	                        key: String(pc.x) + pc.y, 
 	                        coords: pc, 
 	                        cellSize: this.props.cellSize, 
-	                        maxDimensions: this.state.maxDimensions, 
 	                        playableCoordClick: this.props.playableCoordClick, 
 	                        playableCoordDragEnter: this.props.playableCoordDragEnter, 
 	                        playableCoordDragLeave: this.props.playableCoordDragLeave})
@@ -14914,39 +14883,85 @@
 	        }, this);
 
 	        var cellSize = this.props.cellSize;
-	        var svgLength = this.state.maxDimensions * cellSize;
-	        var centerCell = (svgLength - cellSize)/2;
-	        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
+
+	        var pattern = (
+	            React.DOM.pattern({
+	                id: "grid", 
+	                width: cellSize*2, 
+	                height: cellSize*2, 
+	                patternUnits: "userSpaceOnUse"}, 
+	                React.DOM.rect({
+	                    fill: "LightGray", 
+	                    x: "0", 
+	                    y: "0", 
+	                    width: cellSize, 
+	                    height: cellSize}), 
+	                React.DOM.rect({
+	                    fill: "silver", 
+	                    x: cellSize, 
+	                    y: "0", 
+	                    width: cellSize, 
+	                    height: cellSize}), 
+	                React.DOM.rect({
+	                    fill: "LightGray", 
+	                    x: cellSize, 
+	                    y: cellSize, 
+	                    width: cellSize, 
+	                    height: cellSize}), 
+	                React.DOM.rect({
+	                    fill: "silver", 
+	                    x: "0", 
+	                    y: cellSize, 
+	                    width: cellSize, 
+	                    height: cellSize})
+	            )
+	        );
 
 	        return (
 	            React.DOM.svg({id: "boardSVG", 
 	                 xmlns: "http://www.w3.org/2000/svg", 
-	                 version: "1.1", 
-	                 width: svgLength, 
-	                 height: svgLength, 
-	                 style: {top: this.state.top, left: this.state.left}}, 
+	                 version: "1.1"}, 
 	                React.DOM.defs(null, 
-	                    React.DOM.pattern({id: "grid", width: cellSize*2, height: cellSize*2, patternUnits: "userSpaceOnUse"}, 
-	                        React.DOM.rect({fill: "LightGray", x: "0", y: "0", width: cellSize, height: cellSize}), 
-	                        React.DOM.rect({fill: "silver", x: cellSize, y: "0", width: cellSize, height: cellSize}), 
-	                        React.DOM.rect({fill: "LightGray", x: cellSize, y: cellSize, width: cellSize, height: cellSize}), 
-	                        React.DOM.rect({fill: "silver", x: "0", y: cellSize, width: cellSize, height: cellSize})
-	                    )
+	                    pattern
 	                ), 
 	                React.DOM.g({id: "boardGroup"}, 
-	                    React.DOM.rect({fill: "url(#grid)", x: "0", y: "0", width: "100%", height: "100%"}), 
-	                    React.DOM.g({transform: transform}, 
+	                    React.DOM.rect({
+	                        fill: "url(#grid)", 
+	                        x: "0", 
+	                        y: "0", 
+	                        width: "100%", 
+	                        height: "100%"}), 
+	                    React.DOM.g({ref: "boardObjects"}, 
 	                        tilePlacements, 
 	                        playableCoords
-	                    ), 
-	                    React.DOM.line({x1: "2275", y1: "0", x2: "2275", y2: "4550", strokeWidth: "00", stroke: "red"}), 
-	                    React.DOM.line({x1: "0", y1: "2275", x2: "4550", y2: "2275", strokeWidth: "00", stroke: "red"})
+	                    )
 	                )
 
 	            )
 	        );
 	    },
 	    componentDidMount: function() {
+	        var windowDims = adaptor.getScreenDims();
+	        var cellSize = this.props.cellSize;
+
+	        var game = this.props.game;
+
+	        var maxDimensions = (game.numTypes - 1)*game.numTypes*game.copies + 1;
+	        var svgLength = maxDimensions * cellSize;
+	        var centerCell = (svgLength - cellSize)/2;
+	        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
+	        var left = -1 * (svgLength/2 - windowDims.x/2);
+	        var top = -1 * (svgLength/2 - windowDims.y/2);
+
+	        $board = this.getDOMNode();
+	        $boardObjects = this.refs.boardObjects.getDOMNode();
+
+	        $board.style.left = left;
+	        $board.style.top = top;
+
+	        $board.style.width = $board.style.height = svgLength;
+	        $boardObjects.setAttribute("transform", transform);
+
 	        interact('#boardSVG').draggable({
 	            onmove: function (event) {
 	                var target = event.target,
@@ -14964,14 +14979,42 @@
 	                target.setAttribute('data-y', y);
 	            }
 	        });
-	    },
-	    componentWillReceiveProps: function(nextProps) {
-	        var windowDims = adaptor.getScreenDims();
-	        var wh = windowDims.y;
-	        var ww = windowDims.x;
-	        var top = wh/2 - ((wh/2 - this.state.top) * (nextProps.cellSize/this.props.cellSize));
-	        var left = ww/2 - ((ww/2 - this.state.left) * (nextProps.cellSize/this.props.cellSize));
-	        this.setState({left: left, top: top});
+
+	        interact('.playable-coord').dropzone({
+	            // only accept elements matching this CSS selector
+	            accept: '.player-tile',
+	            // Require a 75% element overlap for a drop to be possible
+	            overlap: 0.75,
+
+	            // listen for drop related events:
+
+	            ondropactivate: function (event) {
+	                // add active dropzone feedback
+	                event.target.classList.add('drop-active');
+	            },
+	            ondragenter: function (event) {
+	                console.log('hi');
+	                var draggableElement = event.relatedTarget,
+	                    dropzoneElement = event.target;
+
+	                // feedback the possibility of a drop
+	                dropzoneElement.classList.add('drop-target');
+	                draggableElement.classList.add('can-drop');
+	            },
+	            ondragleave: function (event) {
+	                // remove the drop feedback style
+	                event.target.classList.remove('drop-target');
+	                event.relatedTarget.classList.remove('can-drop');
+	            },
+	            ondrop: function (event) {
+	                event.relatedTarget.textContent = 'Dropped';
+	            },
+	            ondropdeactivate: function (event) {
+	                // remove active dropzone feedback
+	                event.target.classList.remove('drop-active');
+	                event.target.classList.remove('drop-target');
+	            }
+	        });
 	    }
 	});
 
@@ -15076,11 +15119,8 @@
 	        return (
 	            React.DOM.div({id: "game-root"}, 
 	                
-
-
 	                Board({
-	                    tilePlacements: tilePlacements, 
-	                    playableCoords: playableCoords, 
+	                    game: this.state.game, 
 	                    playableCoordDragEnter: this.playableCoordDragEnter, 
 	                    playableCoordDragLeave: this.playableCoordDragLeave, 
 	                    playableCoordClick: this.playableCoordClick}), 
@@ -15373,24 +15413,11 @@
 	                    width: "100", 
 	                    height: "100", 
 	                    className: cls, 
-	                    onClick: this.handleClick, 
-	                    onDragOver: this.dragOver, 
-	                    onDragLeave: this.dragLeave, 
-	                    onDragEnter: this.dragEnter})
+	                    onClick: this.handleClick})
 	            )
 	    },
 	    handleClick: function() {
 	        this.props.playableCoordClick(this);
-	    },
-	    dragOver: function(e) {
-	        e.preventDefault();
-	        e.dataTransfer.dropEffect = 'move';
-	    },                
-	    dragEnter: function(e) {
-	        this.props.playableCoordDragEnter(this, e);
-	    },
-	    dragLeave: function(e) {
-	        this.props.playableCoordDragLeave(this, e);
 	    }
 	});
 
@@ -15531,14 +15558,7 @@
 	                    key: this.props.key, 
 	                    title: "Drag me to the board.", 
 	                    className: "player-tile", 
-	                    onClick: this.click, 
-	                    draggable: this.props.exchangeTiles ? "" : "true", 
-	                    onDrag: this.props.drag, 
-	                    onDragEnd: this.props.dragEnd, 
-	                    onDragStart: this.dragStart, 
-	                    onDragEnter: this.props.dragEnter, 
-	                    onDragOver: this.props.dragOver, 
-	                    onDrop: this.props.drop}, 
+	                    onClick: this.click}, 
 	                    React.DOM.svg({version: "1.1", width: "50", height: "50"}, 
 	                        Tile({tile: this.props.tile, selected: selected, isExchangeTile: isExchangeTile})
 	                    )
@@ -15583,67 +15603,60 @@
 	            orderedTiles: this.props.tiles.slice()
 	        }
 	    },
-	    tileDragStart: function(e) {
-	        this.dragged = e.currentTarget;
-	        this.dragged.style.opacity = 0.75;
-	        e.dataTransfer.effectAllowed = 'move';
-	        e.dataTransfer.setData("text/html", this.state.orderedTiles[this.dragged.dataset.id]);
-	    },
-	    tileDrag: function(e) {      
-	        this.dragged.style.display = "none";
-	    },
-	    tileDragEnd: function(e) {
-	        this.dragged.style.opacity = 1;
-	        this.dragged.style.display = "inline-block"
-	        if (this.dragged.parentNode.children.namedItem("placeholder")) {
-	            this.dragged.parentNode.removeChild(this.state.placeholder);
-	        }
-	        this.over = null;                    
+	    // tileDragStart: function(e) {
+	    //     this.dragged = e.currentTarget;
+	    //     this.dragged.style.opacity = 0.75;
+	    //     e.dataTransfer.effectAllowed = 'move';
+	    //     e.dataTransfer.setData("text/html", this.state.orderedTiles[this.dragged.dataset.id]);
+	    // },
+	    // tileDrag: function(e) {      
+	    //     this.dragged.style.display = "none";
+	    // },
+	    // tileDragEnd: function(e) {
+	    //     this.dragged.style.opacity = 1;
+	    //     this.dragged.style.display = "inline-block"
+	    //     if (this.dragged.parentNode.children.namedItem("placeholder")) {
+	    //         this.dragged.parentNode.removeChild(this.state.placeholder);
+	    //     }
+	    //     this.over = null;                    
 
-	        this.props.playerTileDragEnd(e.currentTarget);
-	    },
-	    tileDragOver: function(e) {
-	        e.preventDefault();
-	        if(e.currentTarget.id == "placeholder") return; 
-	        this.over = e.currentTarget;
-	        this.over.parentNode.insertBefore(this.state.placeholder, this.over);
-	    },
-	    rackDragEnter:function(e) {
-	        e.preventDefault();
-	    },
-	    rackDragOver: function(e) {
-	        e.preventDefault();
-	    },
-	    rackDrop: function(e) {
-	        if (this.over) {
-	            var data = this.state.orderedTiles;
-	            var from = Number(this.dragged.dataset.id);
-	            var to = Number(this.over.dataset.id);
-	            if(from < to) to--;
-	            data.splice(to, 0, data.splice(from, 1)[0]);
-	            this.setState({orderedTiles: data});
-	        }
-	    },
+	    //     this.props.playerTileDragEnd(e.currentTarget);
+	    // },
+	    // tileDragOver: function(e) {
+	    //     e.preventDefault();
+	    //     if(e.currentTarget.id == "placeholder") return; 
+	    //     this.over = e.currentTarget;
+	    //     this.over.parentNode.insertBefore(this.state.placeholder, this.over);
+	    // },
+	    // rackDragEnter:function(e) {
+	    //     e.preventDefault();
+	    // },
+	    // rackDragOver: function(e) {
+	    //     e.preventDefault();
+	    // },
+	    // rackDrop: function(e) {
+	    //     if (this.over) {
+	    //         var data = this.state.orderedTiles;
+	    //         var from = Number(this.dragged.dataset.id);
+	    //         var to = Number(this.over.dataset.id);
+	    //         if(from < to) to--;
+	    //         data.splice(to, 0, data.splice(from, 1)[0]);
+	    //         this.setState({orderedTiles: data});
+	    //     }
+	    // },
 	    render: function() {
 	        var tiles = this.state.orderedTiles.map(function (tile, i) {
-	            return (PlayerTile({id: i, 
-	                                key: i, 
-	                                tile: tile, 
-	                                selectedTile: this.props.selectedTile, 
-	                                exchangeTiles: this.props.exchangeTiles, 
-	                                playerTileSelect: this.props.playerTileSelect, 
-	                                playerTileDragStart: this.props.playerTileDragStart, 
-	                                dragEnd: this.tileDragEnd, 
-	                                dragStart: this.tileDragStart, 
-	                                dragOver: this.tileDragOver, 
-	                                dragEnter: this.tileDragEnter, 
-	                                drag: this.tileDrag, 
-	                                drop: this.tileDrop}))
+	            return (
+	                PlayerTile({
+	                    id: i, 
+	                    key: i, 
+	                    tile: tile, 
+	                    selectedTile: this.props.selectedTile, 
+	                    exchangeTiles: this.props.exchangeTiles, 
+	                    playerTileSelect: this.props.playerTileSelect})
+	            )
 	        }, this);
-	        return (React.DOM.ul({id: "rack", onDragLeave: this.rackDragLeave, 
-	                              onDrop: this.rackDrop, 
-	                              onDragOver: this.rackDragOver, 
-	                              onDragEnter: this.rackDragEnter}, 
+	        return (React.DOM.ul({id: "rack"}, 
 	                    tiles
 	                ));
 	    },
@@ -15663,6 +15676,43 @@
 
 	        var reconciled = reconciled.concat(propTiles);
 	        this.setState({orderedTiles: reconciled});
+	    },
+	    componentDidMount: function() {
+	        interact('.player-tile')
+	            .draggable({
+	                // allow dragging of multple elements at the same time
+	                max: 1,
+
+	                onstart: function (event) {
+
+	                },
+	                // call this function on every dragmove event
+	                onmove: function (event) {
+	                    var target = event.target,
+	                        // keep the dragged position in the data-x/data-y attributes
+	                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+	                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+	                    // translate the element
+	                    target.style.webkitTransform =
+	                    target.style.transform =
+	                        'translate(' + x + 'px, ' + y + 'px)';
+
+	                    // update the posiion attributes
+	                    target.setAttribute('data-x', x);
+	                    target.setAttribute('data-y', y);
+	                },
+	                // call this function on every dragend event
+	                onend: function (event) {
+	                    console.log('hi');
+	                    // var textEl = event.target.querySelector('p');
+	                    
+	                    // textEl && (textEl.textContent =
+	                    //     'moved a distance of '
+	                    //     + (Math.sqrt(event.dx * event.dx +
+	                    //                  event.dy * event.dy)|0) + 'px');
+	                }
+	            })
 	    }
 	});
 
