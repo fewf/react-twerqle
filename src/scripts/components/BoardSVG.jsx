@@ -24,7 +24,7 @@ var BoardSVG = React.createClass({
         var playableCoords = this.props.game.playable().map(function(pc) {
             return (
                     <PlayableCoord 
-                        key={String(pc.x) + pc.y}
+                        key={String(pc.x) + "-" + pc.y}
                         coords={pc}
                         cellSize={this.props.cellSize} 
                         playableCoordClick={this.props.playableCoordClick}
@@ -113,6 +113,8 @@ var BoardSVG = React.createClass({
         $board.style.width = $board.style.height = svgLength;
         $boardObjects.setAttribute("transform", transform);
 
+        var comp = this;
+
         interact('#boardSVG').draggable({
             onmove: function (event) {
                 var target = event.target,
@@ -131,41 +133,9 @@ var BoardSVG = React.createClass({
             }
         });
 
-        interact('.playable-coord').dropzone({
-            // only accept elements matching this CSS selector
-            accept: '.player-tile',
-            // Require a 75% element overlap for a drop to be possible
-            overlap: 0.75,
 
-            // listen for drop related events:
 
-            ondropactivate: function (event) {
-                // add active dropzone feedback
-                event.target.classList.add('drop-active');
-            },
-            ondragenter: function (event) {
-                console.log('hi');
-                var draggableElement = event.relatedTarget,
-                    dropzoneElement = event.target;
 
-                // feedback the possibility of a drop
-                dropzoneElement.classList.add('drop-target');
-                draggableElement.classList.add('can-drop');
-            },
-            ondragleave: function (event) {
-                // remove the drop feedback style
-                event.target.classList.remove('drop-target');
-                event.relatedTarget.classList.remove('can-drop');
-            },
-            ondrop: function (event) {
-                event.relatedTarget.textContent = 'Dropped';
-            },
-            ondropdeactivate: function (event) {
-                // remove active dropzone feedback
-                event.target.classList.remove('drop-active');
-                event.target.classList.remove('drop-target');
-            }
-        });
     }
 });
 

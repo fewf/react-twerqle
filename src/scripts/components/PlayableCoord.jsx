@@ -8,6 +8,9 @@ var React = require('react/addons');
 require('../../styles/PlayableCoord.css');
 
 var PlayableCoord = React.createClass({
+    id: function() {
+        return "pc" + this.props.key;
+    },
     render: function() {
         var cls = "playable-coord"
         cls += this.props.coords.x === 0 && this.props.coords.y === 0 ? " center" : "";
@@ -18,6 +21,7 @@ var PlayableCoord = React.createClass({
         transform += " scale(" + scale + ")";
         return (
                 <rect 
+                    id={this.id()}
                     transform={transform}
                     x="0"
                     y="0"
@@ -29,6 +33,40 @@ var PlayableCoord = React.createClass({
     },
     handleClick: function() {
         this.props.playableCoordClick(this);
+    },
+    componentDidMount: function() {
+
+        
+        var comp = this;
+        interact('#' + this.id()).dropzone({
+            // only accept elements matching this CSS selector
+            accept: '.player-tile',
+            // Require a 75% element overlap for a drop to be possible
+            overlap: 0.51,
+
+            // listen for drop related events:
+
+            ondropactivate: function (event) {
+                // add active dropzone feedback
+                event.target.classList.add('drop-active');
+            },
+            ondragenter: function (event) {
+                comp.props.playableCoordDragEnter(comp);
+            },
+            ondragleave: function (event) {
+                // remove the drop feedback style
+                event.target.classList.remove('play-validated');
+                // event.relatedTarget.classList.remove('can-drop');
+            },
+            ondrop: function (event) {
+                comp.props.playableCoordClick(comp);
+            },
+            ondropdeactivate: function (event) {
+                // remove active dropzone feedback
+                event.target.classList.remove('drop-active');
+                event.target.classList.remove('drop-target');
+            }
+        });
     }
 });
 

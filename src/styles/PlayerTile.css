@@ -8,3 +8,6 @@ li.player-tile {
 li.player-tile.hidden {
     display: none;
 }
+li.player-tile.hovered {
+	margin-left: 55px;
+}
