@@ -1,13 +1,20 @@
 li.player-tile {
     display: inline-block;
     margin: 5px;
-    width: 50px;
-    height: 50px;
     float:left;
 }
 li.player-tile.hidden {
     display: none;
 }
-li.player-tile.hovered {
-	margin-left: 55px;
+li.player-tile.hovered::before {
+	content: '';
+	width: 44px;
+	height: 44px;
+	border: 3px dashed black;
+	display: inline-block;
+	margin: 0 5px;	
+}
+li.player-tile.dragged-tile {
+	width: 0;
+	margin: 0;
 }

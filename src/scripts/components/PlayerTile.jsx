@@ -44,10 +44,31 @@ var PlayerTile = React.createClass({
                 max: 1,
 
                 onstart: function (event) {
-                    comp.props.playerTileSelect(comp);
+                    console.log('dragged start');
+                    console.log(event.target);
+                    var target = event.target;
+
+                    target.classList.add("dragged-tile");
+
+                    var ph = document.createElement('li');
+                    ph.setAttribute('id', 'placeholder');
+                    ph.classList.add('player-tile', 'hovered');
+
+                    target.parentNode.insertBefore(ph, target);
+                    // comp.props.playerTileSelect(comp);
+                    // var target = event.target
+                    // target.style.width = 0;
+
+                    // var placeholder = document.createElement('li');
+                    // placeholder.className = "player-tile"
+                    // placeholder.id = "placeholder";
+
+                    // target.parentNode.insertBefore(placeholder, target.nextSibling);
                 },
                 // call this function on every dragmove event
                 onmove: function (event) {
+                    // console.log('draggedmove');
+                    // console.log(event.target);
                     var target = event.target,
                         // keep the dragged position in the data-x/data-y attributes
                         x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -58,41 +79,70 @@ var PlayerTile = React.createClass({
                     target.style.transform =
                         'translate(' + x + 'px, ' + y + 'px)';
 
+
                     // update the posiion attributes
                     target.setAttribute('data-x', x);
                     target.setAttribute('data-y', y);
                 },
                 // call this function on every dragend event
                 onend: function (event) {
+                    console.log('draggedend');
+                    console.log(event.target);
+                    event.target.classList.remove("dragged-tile");
                     var target = event.target;
                     // remove translation
                     target.style.webkitTransform =
                     target.style.transform = "";
-
+                    // target.style.width = "50px";
                     // update the posiion attributes
                     target.removeAttribute('data-x');
                     target.removeAttribute('data-y');
+                    var placeholder = document.getElementById("placeholder");
+                    placeholder.parentNode.removeChild(placeholder);
+
                 }
             })
             .dropzone({
                 // only accept elements matching this CSS selector
                 accept: '.player-tile',
                 // Require a 75% element overlap for a drop to be possible
-                overlap: 0.51,
+                overlap: 'pointer',
 
                 // listen for drop related events:
 
                 ondropactivate: function (event) {
+                    console.log('drop activate');
+                    console.log(event.target);
                     // add active dropzone feedback
 
                 },
                 ondragenter: function (event) {
-                    // event.target.classList.add('hovered');
+                    console.log('dragenter');
+
+                    console.log(event.target);
+                    document.getElementById('placeholder').style.display = 'none';
+                    event.target.classList.add('hovered');
+                    // var placeholder = document.createElement("li");
+                    // placeholder.className = "player-tile"
+                    // placeholder.id = "placeholder";
+                    // var placeholder = document.getElementById("placeholder");
+                    // var target = event.target;
+                    // target.parentNode.insertBefore(placeholder, target);
+                    // target.parentNode.insertBefore(placeholder, target.nextSibling);
                 },
                 ondragleave: function (event) {
-                    // event.target.classList.remove('hovered');
+                    console.log('dragleave');
+
+                    console.log(event.target);
+                    event.target.classList.remove('hovered');
+                    // var placeholder = document.getElementById("placeholder");
+                    // placeholder.parentNode.removeChild(placeholder);
                 },
                 ondrop: function (event) {
+                    console.log('drop');
+                    console.log(event.target);
+
+                    event.target.classList.remove('hovered');
                     var dragged = event.relatedTarget;
                     var dropped = event.target;
                     var rack = comp._owner;
@@ -101,9 +151,11 @@ var PlayerTile = React.createClass({
                     var to = Number(dropped.dataset.id);
                     if(from < to) to--;
                     data.splice(to, 0, data.splice(from, 1)[0]);
-                    rack.setState({orderedTiles: data});
+                    // rack.setState({orderedTiles: data});
+                    dropped.parentNode.insertBefore(dragged, dropped);
                 },
                 ondropdeactivate: function (event) {
+                    console.log('drop deactivate');
                     // remove active dropzone feedback
                     // event.target.classList.remove('drop-active');
                     // event.target.classList.remove('drop-target');

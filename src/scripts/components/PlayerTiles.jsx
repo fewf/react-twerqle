@@ -96,6 +96,7 @@ var PlayerTiles = React.createClass({
     },
     componentDidMount: function() {
 
+
     }
 });
 

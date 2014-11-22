@@ -11,6 +11,13 @@ var adaptor = require('../twerqle/adaptor');
 require('../../styles/BoardSVG.css');
 
 var BoardSVG = React.createClass({
+    getInitialState: function() {
+        var game = this.props.game;
+        var maxDimensions = (game.numTypes - 1)*game.numTypes*game.copies + 1;
+        return {
+            boardLength: maxDimensions
+        };
+    },
     render: function() {
         var tilePlacements = this.props.game.tilePlacements().map(function(tp) {
             return (
@@ -94,24 +101,19 @@ var BoardSVG = React.createClass({
     componentDidMount: function() {
         var windowDims = adaptor.getScreenDims();
         var cellSize = this.props.cellSize;
+        var boardLength = this.state.boardLength;
 
-        var game = this.props.game;
+        var svgLength = boardLength * cellSize;
 
-        var maxDimensions = (game.numTypes - 1)*game.numTypes*game.copies + 1;
-        var svgLength = maxDimensions * cellSize;
-        var centerCell = (svgLength - cellSize)/2;
-        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
         var left = -1 * (svgLength/2 - windowDims.x/2);
         var top = -1 * (svgLength/2 - windowDims.y/2);
 
         var $board = this.getDOMNode();
-        var $boardObjects = this.refs.boardObjects.getDOMNode();
-
         $board.style.left = left;
         $board.style.top = top;
-
         $board.style.width = $board.style.height = svgLength;
-        $boardObjects.setAttribute("transform", transform);
+
+        this.centerBoardObjects(svgLength, cellSize);
 
         var comp = this;
 
@@ -119,23 +121,34 @@ var BoardSVG = React.createClass({
             onmove: function (event) {
                 var target = event.target,
                     // keep the dragged position in the data-x/data-y attributes
-                    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+                    x = (parseFloat(target.style.left) || 0) + event.dx,
+                    y = (parseFloat(target.style.top) || 0) + event.dy;
 
                 // translate the element
-                target.style.webkitTransform =
-                target.style.transform =
-                    'translate(' + x + 'px, ' + y + 'px)';
+                target.style.left = x;
+                target.style.top = y;
 
                 // update the posiion attributes
                 target.setAttribute('data-x', x);
                 target.setAttribute('data-y', y);
             }
         });
+    },
+    componentDidUpdate: function() {
+        var cellSize = this.props.cellSize;
+        var boardLength = this.state.boardLength;
+        var svgLength = boardLength * cellSize;
 
-
-
-
+        var $board = this.getDOMNode();
+        $board.style.width = $board.style.height = svgLength;
+    
+        this.centerBoardObjects(svgLength, cellSize);
+    },
+    centerBoardObjects: function(svgLength, cellSize) {
+        var centerCell = (svgLength - cellSize)/2;
+        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
+        var $boardObjects = this.refs.boardObjects.getDOMNode();
+        $boardObjects.setAttribute("transform", transform);        
     }
 });
 

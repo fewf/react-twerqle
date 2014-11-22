@@ -58,7 +58,7 @@ var Board = React.createClass({
                     </button>
                 </div>
             </div>
-            )
+        )
     }
 });
 
