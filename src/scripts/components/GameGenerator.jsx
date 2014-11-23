@@ -7,6 +7,7 @@
 var React = require('react/addons');
 var ComputerIcons = require('./ComputerIcons');
 require('../../styles/GameGenerator.css');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var GameGenerator = React.createClass({
     getInitialState: function() {
@@ -17,10 +18,12 @@ var GameGenerator = React.createClass({
     },
     render: function() {
         var computerIcons = this.state.showIcons ? (
-                                <ComputerIcons 
-                                    numOpponents={this.state.numOpponents} 
-                                    addBot={this.addBot} 
-                                    removeBot={this.removeBot} />
+
+                                    <ComputerIcons 
+                                        numOpponents={this.state.numOpponents} 
+                                        addBot={this.addBot} 
+                                        removeBot={this.removeBot} />
+
                                 ) : null;
 
 
@@ -38,7 +41,9 @@ var GameGenerator = React.createClass({
                 <a 
                     className="button-link"
                     onClick={this.handleGameStart}>NEW GAME</a>
-                {computerIcons}
+                <ReactCSSTransitionGroup transitionName="fade">
+                    {computerIcons}
+                </ReactCSSTransitionGroup>
             </div>
             )
     },

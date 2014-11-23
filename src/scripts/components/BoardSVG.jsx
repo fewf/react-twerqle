@@ -131,29 +131,39 @@ var BoardSVG = React.createClass({
                 target.style.left = x;
                 target.style.top = y;
 
+                var windowDims = adaptor.getScreenDims();
+                var cy = windowDims.y/2;
+                var cx = windowDims.x/2;
+                    svgLength = comp.state.boardLength * comp.props.cellSize
+                    viewX = (-1 * x + cx) /svgLength,
+                    viewY = (-1 * y + cy) / svgLength;
+
+                
+                comp.setState({viewX: viewX, viewY: viewY, dragActive: true});
+
                 // update the posiion attributes
                 target.setAttribute('data-x', x);
                 target.setAttribute('data-y', y);
             },
             onend: function(event) {
-                var windowDims = adaptor.getScreenDims();
-                var cy = windowDims.y/2;
-                var cx = windowDims.x/2;
+                // var windowDims = adaptor.getScreenDims();
+                // var cy = windowDims.y/2;
+                // var cx = windowDims.x/2;
 
-                var target = event.target,
-                    // keep the dragged position in the data-x/data-y attributes
-                    left = parseFloat(target.style.left),
-                    top = parseFloat(target.style.top),
-                    svgLength = comp.state.boardLength * comp.props.cellSize
-                    viewX = (-1 * left + cx) /svgLength,
-                    viewY = (-1 * top + cy) / svgLength;
+                // var target = event.target,
+                //     // keep the dragged position in the data-x/data-y attributes
+                //     left = parseFloat(target.style.left),
+                //     top = parseFloat(target.style.top),
+                //     svgLength = comp.state.boardLength * comp.props.cellSize
+                //     viewX = (-1 * left + cx) /svgLength,
+                //     viewY = (-1 * top + cy) / svgLength;
 
                 
-                comp.setState({viewX: viewX, viewY: viewY});                
+                // comp.setState({viewX: viewX, viewY: viewY});                
             }
         });
     },
-    componentDidUpdate: function() {
+    componentDidUpdate: function(prevProps) {
         var windowDims = adaptor.getScreenDims();
         var cy = windowDims.y/2;
         var cx = windowDims.x/2;
@@ -165,8 +175,10 @@ var BoardSVG = React.createClass({
         $board.style.width = $board.style.height = svgLength;
         $board.style.left = -1 * svgLength * this.state.viewX + cx;
         $board.style.top = -1 * svgLength * this.state.viewY + cy;
-    
-        this.centerBoardObjects(svgLength, cellSize);
+
+        if (prevProps.cellSize !== this.props.cellSize) {
+            this.centerBoardObjects(svgLength, cellSize);
+        }
     },
     shouldComponentUpdate: function(nextProps, nextState) {
         if (nextState.dragActive) {

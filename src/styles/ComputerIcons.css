@@ -1,6 +1,26 @@
 .computer-icons {
 	margin: 0 10px;
 }
-.computer-icon-selector{
+.computer-icon-selector {
   cursor: pointer;
+}
+
+/* transitions */
+
+.fade-enter {
+  opacity: 0.01;
+  transition: opacity .2s ease-in;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+}
+
+.fade-leave {
+  opacity: 1;
+  transition: opacity .5s ease-in 1s;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
 }
