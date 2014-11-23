@@ -14987,8 +14987,8 @@
 
 	                var windowDims = adaptor.getScreenDims();
 	                var cy = windowDims.y/2;
-	                var cx = windowDims.x/2;
-	                    svgLength = comp.state.boardLength * comp.props.cellSize
+	                var cx = windowDims.x/2,
+	                    svgLength = comp.state.boardLength * comp.props.cellSize,
 	                    viewX = (-1 * x + cx) /svgLength,
 	                    viewY = (-1 * y + cy) / svgLength;
 
