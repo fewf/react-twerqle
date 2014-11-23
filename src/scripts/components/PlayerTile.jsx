@@ -22,7 +22,12 @@ var PlayerTile = React.createClass({
                     title="Drag me to the board."
                     className="player-tile" 
                     onClick={this.click} >
-                    <svg id={this.id()} version="1.1" width="50" height="50">
+                    <svg 
+                        id={this.id()}
+                        className="player-tile-svg"
+                        version="1.1"
+                        width="50" 
+                        height="50">
                         <Tile tile={this.props.tile} selected={selected} isExchangeTile={isExchangeTile} />
                     </svg>
                 </li>

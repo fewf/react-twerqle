@@ -17,7 +17,8 @@ var BoardSVG = React.createClass({
         return {
             boardLength: maxDimensions,
             viewX: .5,
-            viewY: .5
+            viewY: .5,
+            dragActive: true
         };
     },
     render: function() {
@@ -166,6 +167,14 @@ var BoardSVG = React.createClass({
         $board.style.top = -1 * svgLength * this.state.viewY + cy;
     
         this.centerBoardObjects(svgLength, cellSize);
+    },
+    shouldComponentUpdate: function(nextProps, nextState) {
+        if (nextState.dragActive) {
+            nextState.dragActive = false;
+            return false;
+        } else {
+            return true;
+        }
     },
     centerBoardObjects: function(svgLength, cellSize) {
         var centerCell = (svgLength - cellSize)/2;

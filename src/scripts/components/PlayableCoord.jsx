@@ -38,8 +38,8 @@ var PlayableCoord = React.createClass({
         var comp = this;
         interact('#' + this.id()).dropzone({
             // only accept elements matching this CSS selector
-            accept: '.player-tile',
-            // Require a 75% element overlap for a drop to be possible
+            accept: '.player-tile-svg',
+            // Require a 75% ele-ment o-verlap for a drop to be possible
             overlap: 0.51,
 
             // listen for drop related events:
