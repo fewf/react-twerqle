@@ -9814,6 +9814,7 @@
 	var React = __webpack_require__(6);
 	var ComputerIcons = __webpack_require__(113);
 	__webpack_require__(204);
+	var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 	var GameGenerator = React.createClass({displayName: 'GameGenerator',
 	    getInitialState: function() {
@@ -9824,10 +9825,12 @@
 	    },
 	    render: function() {
 	        var computerIcons = this.state.showIcons ? (
-	                                ComputerIcons({
-	                                    numOpponents: this.state.numOpponents, 
-	                                    addBot: this.addBot, 
-	                                    removeBot: this.removeBot})
+
+	                                    ComputerIcons({
+	                                        numOpponents: this.state.numOpponents, 
+	                                        addBot: this.addBot, 
+	                                        removeBot: this.removeBot})
+
 	                                ) : null;
 
 
@@ -9845,7 +9848,9 @@
 	                React.DOM.a({
 	                    className: "button-link", 
 	                    onClick: this.handleGameStart}, "NEW GAME"), 
-	                computerIcons
+	                ReactCSSTransitionGroup({transitionName: "fade"}, 
+	                    computerIcons
+	                )
 	            )
 	            )
 	    },
@@ -9909,7 +9914,7 @@
 
 	        return (
 	            React.DOM.g({transform: "scale(0.5)"}, 
-	                React.DOM.rect({className: "tileBg", x: "0", y: "0", width: "100", height: "100", fill: squareFill}), 
+	                React.DOM.rect({className: "tileBg", x: "0", y: "0", rx: "10", ry: "10", width: "100", height: "100", fill: squareFill}), 
 	                shape
 	            )
 	        );
@@ -14672,7 +14677,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".computer-icons {\n\tmargin: 0 10px;\n}\n.computer-icon-selector{\n  cursor: pointer;\n}", ""]);
+	exports.push([module.id, ".computer-icons {\n\tmargin: 0 10px;\n}\n.computer-icon-selector {\n  cursor: pointer;\n}\n\n/* transitions */\n\n.fade-enter {\n  opacity: 0.01;\n  transition: opacity .2s ease-in;\n}\n\n.fade-enter.fade-enter-active {\n  opacity: 1;\n}\n\n.fade-leave {\n  opacity: 1;\n  transition: opacity .5s ease-in 1s;\n}\n\n.fade-leave.fade-leave-active {\n  opacity: 0.01;\n}\n", ""]);
 
 /***/ },
 /* 97 */
@@ -14707,14 +14712,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".playable-coord {\n    fill: white;\n    fill-opacity: 0;\n}\n.playable-coord.center { \n    fill: cyan;\n    fill-opacity: 1;\n}\n.playable-coord.play-validated {\n    fill: yellow;\n    fill-opacity: 1;\n}", ""]);
+	exports.push([module.id, ".playable-coord {\n    fill: blue;\n    fill-opacity: .2;\n}\n.playable-coord.center { \n    fill: cyan;\n    fill-opacity: 1;\n}\n.playable-coord.play-validated {\n    fill: yellow;\n    fill-opacity: 1;\n}", ""]);
 
 /***/ },
 /* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 400px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 240px;\n\tmargin: 0 1em;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.player-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n}\n.player-buttons a {\n\tcursor: pointer;\n\tmargin: 5px;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
+	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 500px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 240px;\n\tmargin: 0 1em;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.player-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n}\n.player-buttons a {\n\tcursor: pointer;\n\tmargin: 5px;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
 
 /***/ },
 /* 103 */
@@ -14728,14 +14733,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "li.player-tile {\n    display: inline-block;\n    margin: 5px;\n    width: 50px;\n    height: 50px;\n    float:left;\n}\nli.player-tile.hidden {\n    display: none;\n}\nli.player-tile.hovered {\n\tmargin-left: 55px;\n}", ""]);
+	exports.push([module.id, "li.player-tile {\n    display: inline-block;\n    margin: 5px;\n    float:left;\n    background-color: none;\n}\nli.player-tile.hidden {\n    display: none;\n}\nli.player-tile.hovered::before {\n    content: '';\n    width: 44px;\n    height: 44px;\n    border: 3px dashed black;\n    display: inline-block;\n    margin: 0 5px; \n}\nli.player-tile.dragged-tile {\n    margin: 2px;\n    border: 3px dashed black;\n    background-color: lightgray;\n    border-radius: 10px;\n}", ""]);
 
 /***/ },
 /* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "#placeholder {\n    background-color: green;\n    width: 50px;\n}", ""]);
+	exports.push([module.id, "/*#placeholder {\n    background-color: green;\n    width: 50px;\n}*/", ""]);
 
 /***/ },
 /* 106 */
@@ -14836,7 +14841,7 @@
 	                    )
 	                )
 	            )
-	            )
+	        )
 	    }
 	});
 
@@ -14860,6 +14865,16 @@
 	__webpack_require__(200);
 
 	var BoardSVG = React.createClass({displayName: 'BoardSVG',
+	    getInitialState: function() {
+	        var game = this.props.game;
+	        var maxDimensions = (game.numTypes - 1)*game.numTypes*game.copies + 1;
+	        return {
+	            boardLength: maxDimensions,
+	            viewX: .5,
+	            viewY: .5,
+	            dragActive: true
+	        };
+	    },
 	    render: function() {
 	        var tilePlacements = this.props.game.tilePlacements().map(function(tp) {
 	            return (
@@ -14943,24 +14958,19 @@
 	    componentDidMount: function() {
 	        var windowDims = adaptor.getScreenDims();
 	        var cellSize = this.props.cellSize;
+	        var boardLength = this.state.boardLength;
 
-	        var game = this.props.game;
+	        var svgLength = boardLength * cellSize;
 
-	        var maxDimensions = (game.numTypes - 1)*game.numTypes*game.copies + 1;
-	        var svgLength = maxDimensions * cellSize;
-	        var centerCell = (svgLength - cellSize)/2;
-	        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
 	        var left = -1 * (svgLength/2 - windowDims.x/2);
 	        var top = -1 * (svgLength/2 - windowDims.y/2);
 
 	        var $board = this.getDOMNode();
-	        var $boardObjects = this.refs.boardObjects.getDOMNode();
-
 	        $board.style.left = left;
 	        $board.style.top = top;
-
 	        $board.style.width = $board.style.height = svgLength;
-	        $boardObjects.setAttribute("transform", transform);
+
+	        this.centerBoardObjects(svgLength, cellSize);
 
 	        var comp = this;
 
@@ -14968,23 +14978,75 @@
 	            onmove: function (event) {
 	                var target = event.target,
 	                    // keep the dragged position in the data-x/data-y attributes
-	                    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-	                    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+	                    x = (parseFloat(target.style.left) || 0) + event.dx,
+	                    y = (parseFloat(target.style.top) || 0) + event.dy;
 
 	                // translate the element
-	                target.style.webkitTransform =
-	                target.style.transform =
-	                    'translate(' + x + 'px, ' + y + 'px)';
+	                target.style.left = x;
+	                target.style.top = y;
+
+	                var windowDims = adaptor.getScreenDims();
+	                var cy = windowDims.y/2;
+	                var cx = windowDims.x/2;
+	                    svgLength = comp.state.boardLength * comp.props.cellSize
+	                    viewX = (-1 * x + cx) /svgLength,
+	                    viewY = (-1 * y + cy) / svgLength;
+
+	                
+	                comp.setState({viewX: viewX, viewY: viewY, dragActive: true});
 
 	                // update the posiion attributes
 	                target.setAttribute('data-x', x);
 	                target.setAttribute('data-y', y);
+	            },
+	            onend: function(event) {
+	                // var windowDims = adaptor.getScreenDims();
+	                // var cy = windowDims.y/2;
+	                // var cx = windowDims.x/2;
+
+	                // var target = event.target,
+	                //     // keep the dragged position in the data-x/data-y attributes
+	                //     left = parseFloat(target.style.left),
+	                //     top = parseFloat(target.style.top),
+	                //     svgLength = comp.state.boardLength * comp.props.cellSize
+	                //     viewX = (-1 * left + cx) /svgLength,
+	                //     viewY = (-1 * top + cy) / svgLength;
+
+	                
+	                // comp.setState({viewX: viewX, viewY: viewY});                
 	            }
 	        });
+	    },
+	    componentDidUpdate: function(prevProps) {
+	        var windowDims = adaptor.getScreenDims();
+	        var cy = windowDims.y/2;
+	        var cx = windowDims.x/2;
+	        var cellSize = this.props.cellSize;
+	        var boardLength = this.state.boardLength;
+	        var svgLength = boardLength * cellSize;
 
+	        var $board = this.getDOMNode();
+	        $board.style.width = $board.style.height = svgLength;
+	        $board.style.left = -1 * svgLength * this.state.viewX + cx;
+	        $board.style.top = -1 * svgLength * this.state.viewY + cy;
 
-
-
+	        if (prevProps.cellSize !== this.props.cellSize) {
+	            this.centerBoardObjects(svgLength, cellSize);
+	        }
+	    },
+	    shouldComponentUpdate: function(nextProps, nextState) {
+	        if (nextState.dragActive) {
+	            nextState.dragActive = false;
+	            return false;
+	        } else {
+	            return true;
+	        }
+	    },
+	    centerBoardObjects: function(svgLength, cellSize) {
+	        var centerCell = (svgLength - cellSize)/2;
+	        var transform = "translate(" + (centerCell) + ", " + (centerCell) + ")";
+	        var $boardObjects = this.refs.boardObjects.getDOMNode();
+	        $boardObjects.setAttribute("transform", transform);        
 	    }
 	});
 
@@ -15393,6 +15455,42 @@
 	    handleClick: function() {
 	        this.props.playableCoordClick(this);
 	    },
+	    componentDidUpdate: function() {
+	        var comp = this;
+	        interact('#' + this.id()).dropzone({
+	            // only accept elements matching this CSS selector
+	            accept: '.player-tile-svg',
+	            // Require a 75% ele-ment o-verlap for a drop to be possible
+	            overlap: 0.51,
+
+	            // listen for drop related events:
+
+	            ondropactivate: function (event) {
+	                console.log('drop activate');
+	                // add active dropzone feedback
+	                event.target.classList.add('drop-active');
+	            },
+	            ondragenter: function (event) {
+	                console.log('drop enter');
+	                comp.props.playableCoordDragEnter(comp);
+	            },
+	            ondragleave: function (event) {
+
+	                console.log('drop leave');
+	                // remove the drop feedback style
+	                event.target.classList.remove('play-validated');
+	                // event.relatedTarget.classList.remove('can-drop');
+	            },
+	            ondrop: function (event) {
+	                comp.props.playableCoordClick(comp);
+	            },
+	            ondropdeactivate: function (event) {
+	                // remove active dropzone feedback
+	                event.target.classList.remove('drop-active');
+	                event.target.classList.remove('drop-target');
+	            }
+	        });
+	    },
 	    componentDidMount: function() {
 
 	        
@@ -15401,7 +15499,7 @@
 	            // only accept elements matching this CSS selector
 	            accept: '.player-tile',
 	            // Require a 75% element overlap for a drop to be possible
-	            overlap: 0.51,
+	            overlap: "pointer",
 
 	            // listen for drop related events:
 
@@ -15566,13 +15664,17 @@
 	        var isExchangeTile = this.props.exchangeTiles && (this.props.exchangeTiles.indexOf(this) !== -1);
 	        return (
 	                React.DOM.li({
-	                    id: this.id(), 
 	                    'data-id': this.props.id, 
 	                    key: this.props.key, 
 	                    title: "Drag me to the board.", 
 	                    className: "player-tile", 
 	                    onClick: this.click}, 
-	                    React.DOM.svg({version: "1.1", width: "50", height: "50"}, 
+	                    React.DOM.svg({
+	                        id: this.id(), 
+	                        className: "player-tile-svg", 
+	                        version: "1.1", 
+	                        width: "50", 
+	                        height: "50"}, 
 	                        Tile({tile: this.props.tile, selected: selected, isExchangeTile: isExchangeTile})
 	                    )
 	                )
@@ -15593,10 +15695,17 @@
 	                max: 1,
 
 	                onstart: function (event) {
+	                    console.log('dragged start');
+	                    var target = event.target;
+
+	                    target.parentNode.classList.add("dragged-tile");
+
 	                    comp.props.playerTileSelect(comp);
 	                },
 	                // call this function on every dragmove event
 	                onmove: function (event) {
+	                    // console.log('draggedmove');
+	                    // console.log(event.target);
 	                    var target = event.target,
 	                        // keep the dragged position in the data-x/data-y attributes
 	                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -15607,55 +15716,25 @@
 	                    target.style.transform =
 	                        'translate(' + x + 'px, ' + y + 'px)';
 
+
 	                    // update the posiion attributes
 	                    target.setAttribute('data-x', x);
 	                    target.setAttribute('data-y', y);
 	                },
 	                // call this function on every dragend event
 	                onend: function (event) {
+	                    console.log('draggedend');
+	                    event.target.parentNode.classList.remove("dragged-tile");
 	                    var target = event.target;
 	                    // remove translation
 	                    target.style.webkitTransform =
 	                    target.style.transform = "";
-
+	                    // target.style.width = "50px";
 	                    // update the posiion attributes
 	                    target.removeAttribute('data-x');
 	                    target.removeAttribute('data-y');
-	                }
-	            })
-	            .dropzone({
-	                // only accept elements matching this CSS selector
-	                accept: '.player-tile',
-	                // Require a 75% element overlap for a drop to be possible
-	                overlap: 0.51,
 
-	                // listen for drop related events:
 
-	                ondropactivate: function (event) {
-	                    // add active dropzone feedback
-
-	                },
-	                ondragenter: function (event) {
-	                    // event.target.classList.add('hovered');
-	                },
-	                ondragleave: function (event) {
-	                    // event.target.classList.remove('hovered');
-	                },
-	                ondrop: function (event) {
-	                    var dragged = event.relatedTarget;
-	                    var dropped = event.target;
-	                    var rack = comp._owner;
-	                    var data = rack.state.orderedTiles.slice(0);
-	                    var from = Number(dragged.dataset.id);
-	                    var to = Number(dropped.dataset.id);
-	                    if(from < to) to--;
-	                    data.splice(to, 0, data.splice(from, 1)[0]);
-	                    rack.setState({orderedTiles: data});
-	                },
-	                ondropdeactivate: function (event) {
-	                    // remove active dropzone feedback
-	                    // event.target.classList.remove('drop-active');
-	                    // event.target.classList.remove('drop-target');
 	                }
 	            });
 	    }
@@ -15763,9 +15842,6 @@
 
 	        var reconciled = reconciled.concat(propTiles);
 	        this.setState({orderedTiles: reconciled});
-	    },
-	    componentDidMount: function() {
-
 	    }
 	});
 
