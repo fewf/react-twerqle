@@ -15,7 +15,9 @@ var BoardSVG = React.createClass({
         var game = this.props.game;
         var maxDimensions = (game.numTypes - 1)*game.numTypes*game.copies + 1;
         return {
-            boardLength: maxDimensions
+            boardLength: maxDimensions,
+            viewX: .5,
+            viewY: .5
         };
     },
     render: function() {
@@ -131,16 +133,37 @@ var BoardSVG = React.createClass({
                 // update the posiion attributes
                 target.setAttribute('data-x', x);
                 target.setAttribute('data-y', y);
+            },
+            onend: function(event) {
+                var windowDims = adaptor.getScreenDims();
+                var cy = windowDims.y/2;
+                var cx = windowDims.x/2;
+
+                var target = event.target,
+                    // keep the dragged position in the data-x/data-y attributes
+                    left = parseFloat(target.style.left),
+                    top = parseFloat(target.style.top),
+                    svgLength = comp.state.boardLength * comp.props.cellSize
+                    viewX = (-1 * left + cx) /svgLength,
+                    viewY = (-1 * top + cy) / svgLength;
+
+                
+                comp.setState({viewX: viewX, viewY: viewY});                
             }
         });
     },
     componentDidUpdate: function() {
+        var windowDims = adaptor.getScreenDims();
+        var cy = windowDims.y/2;
+        var cx = windowDims.x/2;
         var cellSize = this.props.cellSize;
         var boardLength = this.state.boardLength;
         var svgLength = boardLength * cellSize;
 
         var $board = this.getDOMNode();
         $board.style.width = $board.style.height = svgLength;
+        $board.style.left = -1 * svgLength * this.state.viewX + cx;
+        $board.style.top = -1 * svgLength * this.state.viewY + cy;
     
         this.centerBoardObjects(svgLength, cellSize);
     },

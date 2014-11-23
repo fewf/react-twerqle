@@ -27,7 +27,7 @@ var Tile = React.createClass({
 
         return (
             <g transform="scale(0.5)">
-                <rect className="tileBg" x="0" y="0" width="100" height="100" fill={squareFill} />
+                <rect className="tileBg" x="0" y="0" rx="10" ry="10" width="100" height="100" fill={squareFill} />
                 {shape}
             </g>
         );

@@ -1,6 +1,6 @@
 .playable-coord {
-    fill: white;
-    fill-opacity: 0;
+    fill: blue;
+    fill-opacity: .2;
 }
 .playable-coord.center { 
     fill: cyan;

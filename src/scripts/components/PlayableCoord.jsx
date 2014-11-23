@@ -34,6 +34,42 @@ var PlayableCoord = React.createClass({
     handleClick: function() {
         this.props.playableCoordClick(this);
     },
+    componentDidUpdate: function() {
+        var comp = this;
+        interact('#' + this.id()).dropzone({
+            // only accept elements matching this CSS selector
+            accept: '.player-tile',
+            // Require a 75% element overlap for a drop to be possible
+            overlap: 0.51,
+
+            // listen for drop related events:
+
+            ondropactivate: function (event) {
+                console.log('drop activate');
+                // add active dropzone feedback
+                event.target.classList.add('drop-active');
+            },
+            ondragenter: function (event) {
+                console.log('drop enter');
+                comp.props.playableCoordDragEnter(comp);
+            },
+            ondragleave: function (event) {
+
+                console.log('drop leave');
+                // remove the drop feedback style
+                event.target.classList.remove('play-validated');
+                // event.relatedTarget.classList.remove('can-drop');
+            },
+            ondrop: function (event) {
+                comp.props.playableCoordClick(comp);
+            },
+            ondropdeactivate: function (event) {
+                // remove active dropzone feedback
+                event.target.classList.remove('drop-active');
+                event.target.classList.remove('drop-target');
+            }
+        });
+    },
     componentDidMount: function() {
 
         
@@ -42,7 +78,7 @@ var PlayableCoord = React.createClass({
             // only accept elements matching this CSS selector
             accept: '.player-tile',
             // Require a 75% element overlap for a drop to be possible
-            overlap: 0.51,
+            overlap: "pointer",
 
             // listen for drop related events:
 

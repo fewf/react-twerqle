@@ -93,10 +93,6 @@ var PlayerTiles = React.createClass({
 
         var reconciled = reconciled.concat(propTiles);
         this.setState({orderedTiles: reconciled});
-    },
-    componentDidMount: function() {
-
-
     }
 });
 
