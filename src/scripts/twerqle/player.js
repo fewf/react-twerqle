@@ -16,6 +16,14 @@ var Player = function(name, type, state) {
     this.score = 0;
     this.tiles = [];
     this.selectedTiles = [];
+
+
+    this.sortTilesBy = (function(state) {
+            return function(sorter) {
+                var getSorter = sorter == 'shape' ? state.getShape : state.getColor;
+                return _.sortBy(this.tiles, getSorter, state)
+            };
+    })(state);
 }
 
 // state changing functions
@@ -183,10 +191,6 @@ Player.prototype.getLongestLine = function(state) {
     return lines[linesLengths.indexOf(maxLine)];
 }
 
-Player.prototype.sortTilesBy = function(sorter, state) {
-    var getSorter = sorter == 'shape' ? state.getShape : state.getColor;
-    return _.sortBy(this.tiles, getSorter, state);
-}
 
 
 exports.Player = Player;

@@ -3,6 +3,8 @@ li.player-tile {
     margin: 5px;
     float:left;
     background-color: none;
+    transition: translate ;
+    translate: translate(0,0);
 }
 li.player-tile.hidden {
     display: none;

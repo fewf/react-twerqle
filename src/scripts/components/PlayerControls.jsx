@@ -9,12 +9,17 @@ var PlayerTiles = require('./PlayerTiles');
 require('../../styles/PlayerControls.css');
 
 var PlayerControls = React.createClass({
+    getInitialState: function() {
+        return {tileSort: 'color'};
+    },
     render: function() {
-
+        var sort = this.state.sort;
+        var tiles = this.props.player.sortTilesBy(sort);
+        var sortTitle = "Sort Tiles by " + ((this.state.sort === "color") ? "Shape" : "Color");
         return (
             <div className="playerControls">
                 <PlayerTiles 
-                    tiles={this.props.player.tiles} 
+                    tiles={tiles} 
                     selectedTile={this.props.selectedTile}
                     exchangeTiles={this.props.exchangeTiles}
                     playerTileSelect={this.props.playerTileSelect}
@@ -22,7 +27,7 @@ var PlayerControls = React.createClass({
                     playerTileDragEnd={this.props.playerTileDragEnd} />
                 <div id="game-message-and-player-buttons">
                     <p className="game-message">{this.props.message}</p>
-                    <div className="player-buttons">
+                    <div className="player-buttons turn-buttons">
                         <a 
                             id="end-turn"
                             title="End Turn"
@@ -39,6 +44,21 @@ var PlayerControls = React.createClass({
                             <svg version="1.1" width="32px" height="32px">
                                 <circle cx="16" cy="16" r="14" />
                                 <path stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3px" fill="none" d="M3,3 L29,29 M3,29 L29,3"/>
+                            </svg>
+                        </a>
+                        </div>
+                        <div className="player-buttons tile-buttons">
+                        <a 
+                            id="sort-tiles"
+                            title={sortTitle}
+                            onClick={this.changeSort} >
+                            <svg version="1.1" width="32px" height="32px">                        
+                                <circle cx="16" cy="16" r="14" />
+                                <path 
+                                    strokeLinejoin="round"
+                                    strokeWidth="3"
+                                    fill="black"
+                                    d="M 16 4 L 28 14 L 4 14 Z M 16 28 L 28 18 L 4 18 Z" />
                             </svg>
                         </a>
                         <a 
@@ -59,7 +79,12 @@ var PlayerControls = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
+    changeSort: function() {
+        this.setState({
+            sort: this.state.sort === "color" ? "shape" : "color"
+        });
+    },
 });
 
 module.exports = PlayerControls;

@@ -55,39 +55,62 @@ var PlayerTile = React.createClass({
 
                     comp.props.playerTileSelect(comp);
                 },
-                // call this function on every dragmove event
                 onmove: function (event) {
-                    // console.log('draggedmove');
-                    // console.log(event.target);
-                    var target = event.target,
-                        // keep the dragged position in the data-x/data-y attributes
-                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                    var target = event.target;
+                    // keep the dragged position in the data-x/data-y attributes
+                    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
                     // translate the element
                     target.style.webkitTransform =
                     target.style.transform =
                         'translate(' + x + 'px, ' + y + 'px)';
 
-
                     // update the posiion attributes
                     target.setAttribute('data-x', x);
                     target.setAttribute('data-y', y);
                 },
-                // call this function on every dragend event
                 onend: function (event) {
-                    console.log('draggedend');
-                    event.target.parentNode.classList.remove("dragged-tile");
+
                     var target = event.target;
-                    // remove translation
-                    target.style.webkitTransform =
-                    target.style.transform = "";
-                    // target.style.width = "50px";
-                    // update the posiion attributes
-                    target.removeAttribute('data-x');
-                    target.removeAttribute('data-y');
+                    target.parentNode.classList.remove("dragged-tile");
 
+                    var intID = window.setInterval(
+                        function(target, origX, origY, steps) {
 
+                            var x = (parseFloat(target.getAttribute('data-x')));
+                            var y = (parseFloat(target.getAttribute('data-y')));
+
+                            var step = Math.round(((origX - x) / origX) * steps) + 1;
+
+                            if (step === steps - 1) {
+                                target.style.webkitTransform = 
+                                target.style.transform =
+                                    "";
+                                target.removeAttribute('data-x');
+                                target.removeAttribute('data-y');
+                                window.clearInterval(intID);
+                                return;
+                            }
+
+                            // increment or decrement coords toward 0
+                            x = origX - (origX * (step/steps));
+                            y = origY - (origY * (step/steps));
+                            // translate the element
+                            target.style.webkitTransform =
+                            target.style.transform =
+                                'translate(' + x + 'px, ' + y + 'px)';
+                            // update the position attributes
+                            target.setAttribute('data-x', x);
+                            target.setAttribute('data-y', y);
+
+                        }.bind(this, 
+                               target, 
+                               (parseFloat(target.getAttribute('data-x'))), 
+                               (parseFloat(target.getAttribute('data-y'))),
+                               50)
+                    , 5);
                 }
             });
     }
