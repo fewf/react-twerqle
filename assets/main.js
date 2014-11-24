@@ -14719,7 +14719,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 500px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 240px;\n\tmargin: 0 1em;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.player-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n}\n.player-buttons a {\n\tcursor: pointer;\n\tmargin: 5px;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
+	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 500px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tposition: absolute;\n\tleft: 0;\n\tright: 0;\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 260px;\n\tmargin: 0 auto;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.turn-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n}\n.tile-buttons {\n\tposition: absolute;\n\tleft:0;\n\tbottom: 0;\n}\n.player-buttons a {\n\tcursor: pointer;\n\tmargin: 5px;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
 
 /***/ },
 /* 103 */
@@ -14733,7 +14733,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "li.player-tile {\n    display: inline-block;\n    margin: 5px;\n    float:left;\n    background-color: none;\n}\nli.player-tile.hidden {\n    display: none;\n}\nli.player-tile.hovered::before {\n    content: '';\n    width: 44px;\n    height: 44px;\n    border: 3px dashed black;\n    display: inline-block;\n    margin: 0 5px; \n}\nli.player-tile.dragged-tile {\n    margin: 2px;\n    border: 3px dashed black;\n    background-color: lightgray;\n    border-radius: 10px;\n}", ""]);
+	exports.push([module.id, "li.player-tile {\n    display: inline-block;\n    margin: 5px;\n    float:left;\n    background-color: none;\n    transition: translate ;\n    translate: translate(0,0);\n}\nli.player-tile.hidden {\n    display: none;\n}\nli.player-tile.hovered::before {\n    content: '';\n    width: 44px;\n    height: 44px;\n    border: 3px dashed black;\n    display: inline-block;\n    margin: 0 5px; \n}\nli.player-tile.dragged-tile {\n    margin: 2px;\n    border: 3px dashed black;\n    background-color: lightgray;\n    border-radius: 10px;\n}\n", ""]);
 
 /***/ },
 /* 105 */
@@ -15545,12 +15545,17 @@
 	__webpack_require__(207);
 
 	var PlayerControls = React.createClass({displayName: 'PlayerControls',
+	    getInitialState: function() {
+	        return {tileSort: 'color'};
+	    },
 	    render: function() {
-
+	        var sort = this.state.sort;
+	        var tiles = this.props.player.sortTilesBy(sort);
+	        var sortTitle = "Sort Tiles by " + ((this.state.sort === "color") ? "Shape" : "Color");
 	        return (
 	            React.DOM.div({className: "playerControls"}, 
 	                PlayerTiles({
-	                    tiles: this.props.player.tiles, 
+	                    tiles: tiles, 
 	                    selectedTile: this.props.selectedTile, 
 	                    exchangeTiles: this.props.exchangeTiles, 
 	                    playerTileSelect: this.props.playerTileSelect, 
@@ -15558,7 +15563,7 @@
 	                    playerTileDragEnd: this.props.playerTileDragEnd}), 
 	                React.DOM.div({id: "game-message-and-player-buttons"}, 
 	                    React.DOM.p({className: "game-message"}, this.props.message), 
-	                    React.DOM.div({className: "player-buttons"}, 
+	                    React.DOM.div({className: "player-buttons turn-buttons"}, 
 	                        React.DOM.a({
 	                            id: "end-turn", 
 	                            title: "End Turn", 
@@ -15575,6 +15580,21 @@
 	                            React.DOM.svg({version: "1.1", width: "32px", height: "32px"}, 
 	                                React.DOM.circle({cx: "16", cy: "16", r: "14"}), 
 	                                React.DOM.path({stroke: "black", strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "3px", fill: "none", d: "M3,3 L29,29 M3,29 L29,3"})
+	                            )
+	                        )
+	                        ), 
+	                        React.DOM.div({className: "player-buttons tile-buttons"}, 
+	                        React.DOM.a({
+	                            id: "sort-tiles", 
+	                            title: sortTitle, 
+	                            onClick: this.changeSort}, 
+	                            React.DOM.svg({version: "1.1", width: "32px", height: "32px"}, 
+	                                React.DOM.circle({cx: "16", cy: "16", r: "14"}), 
+	                                React.DOM.path({
+	                                    strokeLinejoin: "round", 
+	                                    strokeWidth: "3", 
+	                                    fill: "black", 
+	                                    d: "M 16 4 L 28 14 L 4 14 Z M 16 28 L 28 18 L 4 18 Z"})
 	                            )
 	                        ), 
 	                        React.DOM.a({
@@ -15595,7 +15615,12 @@
 	                )
 	            )
 	        );
-	    }
+	    },
+	    changeSort: function() {
+	        this.setState({
+	            sort: this.state.sort === "color" ? "shape" : "color"
+	        });
+	    },
 	});
 
 	module.exports = PlayerControls;
@@ -15702,39 +15727,62 @@
 
 	                    comp.props.playerTileSelect(comp);
 	                },
-	                // call this function on every dragmove event
 	                onmove: function (event) {
-	                    // console.log('draggedmove');
-	                    // console.log(event.target);
-	                    var target = event.target,
-	                        // keep the dragged position in the data-x/data-y attributes
-	                        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-	                        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+	                    var target = event.target;
+	                    // keep the dragged position in the data-x/data-y attributes
+	                    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+	                    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
 	                    // translate the element
 	                    target.style.webkitTransform =
 	                    target.style.transform =
 	                        'translate(' + x + 'px, ' + y + 'px)';
 
-
 	                    // update the posiion attributes
 	                    target.setAttribute('data-x', x);
 	                    target.setAttribute('data-y', y);
 	                },
-	                // call this function on every dragend event
 	                onend: function (event) {
-	                    console.log('draggedend');
-	                    event.target.parentNode.classList.remove("dragged-tile");
+
 	                    var target = event.target;
-	                    // remove translation
-	                    target.style.webkitTransform =
-	                    target.style.transform = "";
-	                    // target.style.width = "50px";
-	                    // update the posiion attributes
-	                    target.removeAttribute('data-x');
-	                    target.removeAttribute('data-y');
+	                    target.parentNode.classList.remove("dragged-tile");
 
+	                    var intID = window.setInterval(
+	                        function(target, origX, origY, steps) {
 
+	                            var x = (parseFloat(target.getAttribute('data-x')));
+	                            var y = (parseFloat(target.getAttribute('data-y')));
+
+	                            var step = Math.round(((origX - x) / origX) * steps) + 1;
+
+	                            if (step === steps - 1) {
+	                                target.style.webkitTransform = 
+	                                target.style.transform =
+	                                    "";
+	                                target.removeAttribute('data-x');
+	                                target.removeAttribute('data-y');
+	                                window.clearInterval(intID);
+	                                return;
+	                            }
+
+	                            // increment or decrement coords toward 0
+	                            x = origX - (origX * (step/steps));
+	                            y = origY - (origY * (step/steps));
+	                            // translate the element
+	                            target.style.webkitTransform =
+	                            target.style.transform =
+	                                'translate(' + x + 'px, ' + y + 'px)';
+	                            // update the position attributes
+	                            target.setAttribute('data-x', x);
+	                            target.setAttribute('data-y', y);
+
+	                        }.bind(this, 
+	                               target, 
+	                               (parseFloat(target.getAttribute('data-x'))), 
+	                               (parseFloat(target.getAttribute('data-y'))),
+	                               50)
+	                    , 5);
 	                }
 	            });
 	    }
@@ -15759,59 +15807,8 @@
 	__webpack_require__(210);
 
 	var PlayerTiles = React.createClass({displayName: 'PlayerTiles',
-	    getInitialState: function() {
-	        var placeholder = document.createElement("li");
-	        placeholder.className = "player-tile"
-	        placeholder.id = "placeholder";
-	        placeholder.addEventListener("drop", this.tileDrop)
-	        return {
-	            placeholder: placeholder,
-	            orderedTiles: this.props.tiles.slice()
-	        }
-	    },
-	    // tileDragStart: function(e) {
-	    //     this.dragged = e.currentTarget;
-	    //     this.dragged.style.opacity = 0.75;
-	    //     e.dataTransfer.effectAllowed = 'move';
-	    //     e.dataTransfer.setData("text/html", this.state.orderedTiles[this.dragged.dataset.id]);
-	    // },
-	    // tileDrag: function(e) {      
-	    //     this.dragged.style.display = "none";
-	    // },
-	    // tileDragEnd: function(e) {
-	    //     this.dragged.style.opacity = 1;
-	    //     this.dragged.style.display = "inline-block"
-	    //     if (this.dragged.parentNode.children.namedItem("placeholder")) {
-	    //         this.dragged.parentNode.removeChild(this.state.placeholder);
-	    //     }
-	    //     this.over = null;                    
-
-	    //     this.props.playerTileDragEnd(e.currentTarget);
-	    // },
-	    // tileDragOver: function(e) {
-	    //     e.preventDefault();
-	    //     if(e.currentTarget.id == "placeholder") return; 
-	    //     this.over = e.currentTarget;
-	    //     this.over.parentNode.insertBefore(this.state.placeholder, this.over);
-	    // },
-	    // rackDragEnter:function(e) {
-	    //     e.preventDefault();
-	    // },
-	    // rackDragOver: function(e) {
-	    //     e.preventDefault();
-	    // },
-	    // rackDrop: function(e) {
-	    //     if (this.over) {
-	    //         var data = this.state.orderedTiles;
-	    //         var from = Number(this.dragged.dataset.id);
-	    //         var to = Number(this.over.dataset.id);
-	    //         if(from < to) to--;
-	    //         data.splice(to, 0, data.splice(from, 1)[0]);
-	    //         this.setState({orderedTiles: data});
-	    //     }
-	    // },
 	    render: function() {
-	        var tiles = this.state.orderedTiles.map(function (tile, i) {
+	        var tiles = this.props.tiles.map(function (tile, i) {
 	            return (
 	                PlayerTile({
 	                    id: i, 
@@ -15825,23 +15822,6 @@
 	        return (React.DOM.ul({id: "rack"}, 
 	                    tiles
 	                ));
-	    },
-	    componentWillReceiveProps: function(nextProps) {
-
-	        var orderedTiles = this.state.orderedTiles;
-	        var propTiles = nextProps.tiles.slice();
-	        var reconciled = [];
-
-	        for (var i = 0; i < orderedTiles.length; i++) {
-	            var found = propTiles.indexOf(orderedTiles[i]);
-	            if (found != -1) {
-	                reconciled.push(orderedTiles[i]);
-	                propTiles.splice(found, 1);
-	            }
-	        };
-
-	        var reconciled = reconciled.concat(propTiles);
-	        this.setState({orderedTiles: reconciled});
 	    }
 	});
 
@@ -30402,6 +30382,14 @@
 	    this.score = 0;
 	    this.tiles = [];
 	    this.selectedTiles = [];
+
+
+	    this.sortTilesBy = (function(state) {
+	            return function(sorter) {
+	                var getSorter = sorter == 'shape' ? state.getShape : state.getColor;
+	                return _.sortBy(this.tiles, getSorter, state)
+	            };
+	    })(state);
 	}
 
 	// state changing functions
@@ -30569,10 +30557,6 @@
 	    return lines[linesLengths.indexOf(maxLine)];
 	}
 
-	Player.prototype.sortTilesBy = function(sorter, state) {
-	    var getSorter = sorter == 'shape' ? state.getShape : state.getColor;
-	    return _.sortBy(this.tiles, getSorter, state);
-	}
 
 
 	exports.Player = Player;
