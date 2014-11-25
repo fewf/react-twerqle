@@ -14719,7 +14719,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 500px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tposition: absolute;\n\tleft: 0;\n\tright: 0;\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 260px;\n\tmargin: 0 auto;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.turn-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n}\n.tile-buttons {\n\tposition: absolute;\n\tleft:0;\n\tbottom: 0;\n}\n.player-buttons a {\n\tcursor: pointer;\n\tmargin: 5px;\n}\n.player-buttons a svg circle {\n\tfill: lightgreen;\n}\n.player-buttons a:hover svg circle {\n\tfill: green;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
+	exports.push([module.id, ".playerControls {\n\tposition: fixed;\n    bottom: 0;\n    left: 0;\n    height: 100px;\n    z-index: 100;\n    border-top: 2px solid black;\t\n    background-color: pink;\n    width: 500px;\n}\n#game-message-and-player-buttons {\n\tposition: relative;\n\twidth: 100%;\n\theight: 33px;\n}\n.playerControls div p {\n\tposition: absolute;\n\tleft: 0;\n\tright: 0;\n\tfont-family: monospace;\n\tdisplay: inline-block;\n\twidth: 260px;\n\tmargin: 0 auto;\n\ttext-align: center;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 5px;\n}\n.turn-buttons {\n\tposition: absolute;\n\tright: 0;\n\tbottom: 0;\n}\n.tile-buttons {\n\tposition: absolute;\n\tleft:0;\n\tbottom: 0;\n}\n.player-buttons a {\n\tcursor: pointer;\n\tmargin: 5px;\n}\n#end-turn svg circle {\n\tfill: lightgreen;\n}\n#end-turn:hover svg circle {\n\tfill: green;\n}\n#reset-turn svg circle {\n\tfill: hotpink;\n}\n#reset-turn:hover svg circle {\n\tfill: red;\n}\n.tile-buttons a svg circle {\n\tfill: lightblue;\n}\n.tile-buttons a:hover svg circle {\n\tfill: blue;\n}\n.player-buttons a:active svg circle {\n\tfill: yellow;\n}\nul#rack {\n\tdisplay: table;\n\tmargin: 0 auto 5px;\n\tbackground-color: rgba(255,255,255,.8);\n\tborder-radius: 3px;\n\theight: 60px;\n\tpadding:0;\n}\nul#rack li {\n\tcursor: move;\n}", ""]);
 
 /***/ },
 /* 103 */
@@ -14733,7 +14733,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "li.player-tile {\n    display: inline-block;\n    margin: 5px;\n    float:left;\n    background-color: none;\n    transition: translate ;\n    translate: translate(0,0);\n}\nli.player-tile.hidden {\n    display: none;\n}\nli.player-tile.hovered::before {\n    content: '';\n    width: 44px;\n    height: 44px;\n    border: 3px dashed black;\n    display: inline-block;\n    margin: 0 5px; \n}\nli.player-tile.dragged-tile {\n    margin: 2px;\n    border: 3px dashed black;\n    background-color: lightgray;\n    border-radius: 10px;\n}\n", ""]);
+	exports.push([module.id, "li.player-tile {\n    display: inline-block;\n    margin: 5px;\n    float:left;\n    background-color: none;\n    transition: translate ;\n    translate: translate(0,0);\n}\nli.player-tile.hidden {\n    display: none;\n}\nli.player-tile.hovered::before {\n    content: '';\n    width: 44px;\n    height: 44px;\n    border: 3px dashed black;\n    display: inline-block;\n    margin: 0 5px; \n}\nli.player-tile.dragged-tile {\n    margin: 2px;\n    border: 3px dashed black;\n    background-color: lightgray;\n    border-radius: 10px;\n}\nli.player-tile.dragged-tile svg {\n    opacity: 0.5;\n}\n", ""]);
 
 /***/ },
 /* 105 */
@@ -15166,6 +15166,7 @@
 	                    message: this.state.gameMessage, 
 
 	                    playerTileSelect: this.playerTileSelect, 
+	                    playerTileDeselect: this.playerTileDeselect, 
 	                    handleEndTurn: this.handleEndTurn, 
 	                    handleExchange: this.handleExchange, 
 	                    handleTurnReset: this.handleTurnReset, 
@@ -15174,13 +15175,16 @@
 	            )
 	            )                    
 	    },
+	    playerTileDeselect: function() {
+	        this.setState({selectedTile: null, gameMessage: ""});
+	    },
 	    playerTileSelect: function(tileComponent) {
 	        if (!this.state.exchangeTiles) {
 	            // handling for tile placement mode
 	            if (this.state.selectedTile !== tileComponent) {
 	                this.setState({selectedTile: tileComponent, gameMessage: "Tile selected"});
 	            } else {
-	                this.setState({selectedTile: null, gameMessage: ""});
+	                this.playerTileDeselect();
 	            }                
 	        } else {
 	            // handling for exchange mode
@@ -15304,12 +15308,10 @@
 	        });
 
 	        window.setTimeout(function() {
-
 	            this.setState({
 	                game: this.state.game,
 	                gameMessage: gameMessage
 	            }, this.routeGame);
-
 	        }.bind(this), playSpeed);
 	    },        
 	    componentDidMount: function() {
@@ -15461,7 +15463,7 @@
 	            // only accept elements matching this CSS selector
 	            accept: '.player-tile-svg',
 	            // Require a 75% ele-ment o-verlap for a drop to be possible
-	            overlap: 0.51,
+	            overlap: 'pointer',
 
 	            // listen for drop related events:
 
@@ -15559,6 +15561,7 @@
 	                    selectedTile: this.props.selectedTile, 
 	                    exchangeTiles: this.props.exchangeTiles, 
 	                    playerTileSelect: this.props.playerTileSelect, 
+	                    playerTileDeselect: this.props.playerTileDeselect, 
 	                    playerTileDragStart: this.props.playerTileDragStart, 
 	                    playerTileDragEnd: this.props.playerTileDragEnd}), 
 	                React.DOM.div({id: "game-message-and-player-buttons"}, 
@@ -15720,11 +15723,13 @@
 	                max: 1,
 
 	                onstart: function (event) {
-	                    console.log('dragged start');
 	                    var target = event.target;
 
 	                    target.parentNode.classList.add("dragged-tile");
+	                    console.log('dragstart playertileselect');
 
+	                    // reset player tile selection and select tile
+	                    comp.props.playerTileDeselect();
 	                    comp.props.playerTileSelect(comp);
 	                },
 	                onmove: function (event) {
@@ -15744,19 +15749,28 @@
 	                    target.setAttribute('data-y', y);
 	                },
 	                onend: function (event) {
+	                    // 'snap' tile back to rack
 
+	                    // note: would LOVE to do this instead as a CSS transition
+	                    // but because the drageffect is achieved by manipulating
+	                    // the element's attribute, that's not possible.
+
+	                    // note 2: managing the player tile selection relies on the
+	                    // fact that along with the drag events, the element's
+	                    // click event will be raised last, which will deselect 
+	                    // the dragged tile
 	                    var target = event.target;
 	                    target.parentNode.classList.remove("dragged-tile");
-
 	                    var intID = window.setInterval(
 	                        function(target, origX, origY, steps) {
 
 	                            var x = (parseFloat(target.getAttribute('data-x')));
 	                            var y = (parseFloat(target.getAttribute('data-y')));
-
+	                            // determine which step we're on by
+	                            // finding how many fractions have been removed
 	                            var step = Math.round(((origX - x) / origX) * steps) + 1;
 
-	                            if (step === steps - 1) {
+	                            if (step === steps) {
 	                                target.style.webkitTransform = 
 	                                target.style.transform =
 	                                    "";
@@ -15816,7 +15830,8 @@
 	                    tile: tile, 
 	                    selectedTile: this.props.selectedTile, 
 	                    exchangeTiles: this.props.exchangeTiles, 
-	                    playerTileSelect: this.props.playerTileSelect})
+	                    playerTileSelect: this.props.playerTileSelect, 
+	                    playerTileDeselect: this.props.playerTileDeselect})
 	            )
 	        }, this);
 	        return (React.DOM.ul({id: "rack"}, 
