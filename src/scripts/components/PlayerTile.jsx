@@ -48,11 +48,13 @@ var PlayerTile = React.createClass({
                 max: 1,
 
                 onstart: function (event) {
-                    console.log('dragged start');
                     var target = event.target;
 
                     target.parentNode.classList.add("dragged-tile");
+                    console.log('dragstart playertileselect');
 
+                    // reset player tile selection and select tile
+                    comp.props.playerTileDeselect();
                     comp.props.playerTileSelect(comp);
                 },
                 onmove: function (event) {
@@ -72,19 +74,28 @@ var PlayerTile = React.createClass({
                     target.setAttribute('data-y', y);
                 },
                 onend: function (event) {
+                    // 'snap' tile back to rack
 
+                    // note: would LOVE to do this instead as a CSS transition
+                    // but because the drageffect is achieved by manipulating
+                    // the element's attribute, that's not possible.
+
+                    // note 2: managing the player tile selection relies on the
+                    // fact that along with the drag events, the element's
+                    // click event will be raised last, which will deselect 
+                    // the dragged tile
                     var target = event.target;
                     target.parentNode.classList.remove("dragged-tile");
-
                     var intID = window.setInterval(
                         function(target, origX, origY, steps) {
 
                             var x = (parseFloat(target.getAttribute('data-x')));
                             var y = (parseFloat(target.getAttribute('data-y')));
-
+                            // determine which step we're on by
+                            // finding how many fractions have been removed
                             var step = Math.round(((origX - x) / origX) * steps) + 1;
 
-                            if (step === steps - 1) {
+                            if (step === steps) {
                                 target.style.webkitTransform = 
                                 target.style.transform =
                                     "";

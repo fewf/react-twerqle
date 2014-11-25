@@ -39,11 +39,23 @@
 	cursor: pointer;
 	margin: 5px;
 }
-.player-buttons a svg circle {
+#end-turn svg circle {
 	fill: lightgreen;
 }
-.player-buttons a:hover svg circle {
+#end-turn:hover svg circle {
 	fill: green;
+}
+#reset-turn svg circle {
+	fill: hotpink;
+}
+#reset-turn:hover svg circle {
+	fill: red;
+}
+.tile-buttons a svg circle {
+	fill: lightblue;
+}
+.tile-buttons a:hover svg circle {
+	fill: blue;
 }
 .player-buttons a:active svg circle {
 	fill: yellow;

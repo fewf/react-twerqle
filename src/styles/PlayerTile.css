@@ -23,3 +23,6 @@ li.player-tile.dragged-tile {
     background-color: lightgray;
     border-radius: 10px;
 }
+li.player-tile.dragged-tile svg {
+    opacity: 0.5;
+}

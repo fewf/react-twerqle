@@ -23,6 +23,7 @@ var PlayerControls = React.createClass({
                     selectedTile={this.props.selectedTile}
                     exchangeTiles={this.props.exchangeTiles}
                     playerTileSelect={this.props.playerTileSelect}
+                    playerTileDeselect={this.props.playerTileDeselect}
                     playerTileDragStart={this.props.playerTileDragStart}
                     playerTileDragEnd={this.props.playerTileDragEnd} />
                 <div id="game-message-and-player-buttons">

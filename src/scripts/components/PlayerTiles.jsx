@@ -19,7 +19,8 @@ var PlayerTiles = React.createClass({
                     tile={tile} 
                     selectedTile={this.props.selectedTile}
                     exchangeTiles={this.props.exchangeTiles}
-                    playerTileSelect={this.props.playerTileSelect} />
+                    playerTileSelect={this.props.playerTileSelect}
+                    playerTileDeselect={this.props.playerTileDeselect} />
             )
         }, this);
         return (<ul id="rack">

@@ -40,7 +40,7 @@ var PlayableCoord = React.createClass({
             // only accept elements matching this CSS selector
             accept: '.player-tile-svg',
             // Require a 75% ele-ment o-verlap for a drop to be possible
-            overlap: 0.51,
+            overlap: 'pointer',
 
             // listen for drop related events:
 

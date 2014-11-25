@@ -47,6 +47,7 @@ var Game = React.createClass({
                     message={this.state.gameMessage}
 
                     playerTileSelect={this.playerTileSelect}
+                    playerTileDeselect={this.playerTileDeselect}
                     handleEndTurn={this.handleEndTurn}
                     handleExchange={this.handleExchange}
                     handleTurnReset={this.handleTurnReset}
@@ -55,13 +56,16 @@ var Game = React.createClass({
             </div>
             )                    
     },
+    playerTileDeselect: function() {
+        this.setState({selectedTile: null, gameMessage: ""});
+    },
     playerTileSelect: function(tileComponent) {
         if (!this.state.exchangeTiles) {
             // handling for tile placement mode
             if (this.state.selectedTile !== tileComponent) {
                 this.setState({selectedTile: tileComponent, gameMessage: "Tile selected"});
             } else {
-                this.setState({selectedTile: null, gameMessage: ""});
+                this.playerTileDeselect();
             }                
         } else {
             // handling for exchange mode
@@ -185,12 +189,10 @@ var Game = React.createClass({
         });
 
         window.setTimeout(function() {
-
             this.setState({
                 game: this.state.game,
                 gameMessage: gameMessage
             }, this.routeGame);
-
         }.bind(this), playSpeed);
     },        
     componentDidMount: function() {
