@@ -36,7 +36,6 @@ var GameGenerator = React.createClass({
         return (
             <div 
                 id="game-generator"
-                onTap={mouseEnter}
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave} >
                 <a 
@@ -57,18 +56,23 @@ var GameGenerator = React.createClass({
         this.setState({ numOpponents: this.state.numOpponents - 1 });
     },
     handleGameStart: function(e) {
-        app.game = app.twq.startGame(this.state.numOpponents);
-        var botNum = 1;
-        for (var i = 0; i < app.game.players.length; i++) {
-            if (app.game.players[i].type) {
-                app.game.players[i].name = "Bot " + botNum;
-                botNum++;
-            } else {
-                app.game.players[i].name = "You";
-            }
-        };
-        this.props.handleGameStart(app.game);
-        this.setState({showIcons: false});
+        if (!this.state.showIcons) {
+            this.setState({showIcons: true});
+        } else {
+            app.game = app.twq.startGame(this.state.numOpponents);
+            var botNum = 1;
+            for (var i = 0; i < app.game.players.length; i++) {
+                if (app.game.players[i].type) {
+                    app.game.players[i].name = "Bot " + botNum;
+                    botNum++;
+                } else {
+                    app.game.players[i].name = "You";
+                }
+            };
+            this.props.handleGameStart(app.game);
+            this.setState({showIcons: false});            
+        }
+
     }
 });
 
