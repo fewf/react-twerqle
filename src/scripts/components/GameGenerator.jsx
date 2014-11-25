@@ -36,6 +36,7 @@ var GameGenerator = React.createClass({
         return (
             <div 
                 id="game-generator"
+                onTap={mouseEnter}
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave} >
                 <a 
