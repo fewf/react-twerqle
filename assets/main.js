@@ -9843,6 +9843,7 @@
 	        return (
 	            React.DOM.div({
 	                id: "game-generator", 
+	                onTap: mouseEnter, 
 	                onMouseEnter: mouseEnter, 
 	                onMouseLeave: mouseLeave}, 
 	                React.DOM.a({
