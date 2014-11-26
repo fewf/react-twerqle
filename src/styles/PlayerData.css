@@ -1,19 +1,36 @@
 #player-data{
 	background-color: rgba(255,255,255,0.8);
-    height: 50px;
+    height: 100%;
     border-radius: 5px;
-    padding: 25px 1em;
-    float: left;
-    margin:0 10px;
+    margin:0 10px 0 0;
 }
 #player-data div {
 	display: inline-block;
-	padding: 0 0.5em;
+	padding: 5px 0.5em;
+	border-left: 1px solid black;
+	float: left;
+}
+#player-data div:first-child {
+	border-left: none;
+}
+#player-data div * {
+	margin: 3px auto;
 }
 #player-data div p {
 	border-top: 1px solid black;
 	width: 32px;
-	margin: 0;
 	padding-top: 5px;
 	text-align: center;
+}
+#player-data div svg {
+	display: block;
+}
+#player-data div p.winner {
+	font-size: 8pt;
+	border-top: none;
+	padding: 0;
+}
+#player-data div.winner {
+	background-color: inherit;
+	margin-top: -213px;
 }

@@ -57,9 +57,11 @@ var Game = React.createClass({
             )                    
     },
     playerTileDeselect: function() {
+        if ( this.state.gameOver ) return;
         this.setState({selectedTile: null, gameMessage: ""});
     },
     playerTileSelect: function(tileComponent) {
+        if ( this.state.gameOver ) return;
         if (!this.state.exchangeTiles) {
             // handling for tile placement mode
             if (this.state.selectedTile !== tileComponent) {
@@ -81,14 +83,17 @@ var Game = React.createClass({
 
     },
     playableCoordClick: function(playableCoord) {
-        var game = this.state.game;
+        if ( this.state.gameOver ) return;
         if (!this.state.selectedTile) return;
+        
+        var game = this.state.game;
         var success = game.getCurrentPlayer().selectTile(game, this.state.selectedTile.props.tile).placeSelectedTile(game, playableCoord.props.coords);
         if (success) {
             this.setState({game: app.game, selectedTile: null, gameMessage: "Tile placed"});
         }
     },
     handleEndTurn: function() {
+        if ( this.state.gameOver ) return;
         var game = this.state.game;
         var success = game.getCurrentPlayer().endTurn(game);
         if (!success) {
@@ -102,6 +107,7 @@ var Game = React.createClass({
         
     },
     handleExchange: function() {
+        if ( this.state.gameOver ) return;
         if (this.state.exchangeTiles) {
             if (!this.state.exchangeTiles.length) {
                 this.setState({exchangeTiles: null, gameMessage: "Exchange cancelled."});
@@ -128,6 +134,7 @@ var Game = React.createClass({
         }
     },
     handleTurnReset: function() {
+        if ( this.state.gameOver ) return;
         this.state.game.resetTurn();
         this.state.game.getCurrentPlayer().selectedTiles = [];
         this.setState({
@@ -137,10 +144,11 @@ var Game = React.createClass({
                     gameMessage: "Turn reset"});
     },
     playerTileDragStart: function(tile) {
+        if ( this.state.gameOver ) return;
         if (this.state.selectedTile !== tile) this.playerTileSelect(tile);
     },
     playerTileDragEnd: function() {
-
+        if ( this.state.gameOver ) return;
         if (this.over) {
             this.playableCoordClick(this.over);
             this.over = null;
@@ -148,12 +156,14 @@ var Game = React.createClass({
         this.setState({selectedTile: null, gameMessage: ""});
     },        
     playableCoordDragEnter: function(playableCoord, e) {
+        if ( this.state.gameOver ) return;
         if (this.state.game.board.placeTileValidate(playableCoord.props.coords, this.state.selectedTile.props.tile)) {
             this.over = playableCoord;
             playableCoord.getDOMNode().classList.add("play-validated");
         }
     },
     playableCoordDragLeave: function(playableCoord, e) {
+        if ( this.state.gameOver ) return;
         if (playableCoord === this.over) this.over = null;
         playableCoord.getDOMNode().classList.remove("play-validated");
     },
