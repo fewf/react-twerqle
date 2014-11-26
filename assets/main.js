@@ -14731,7 +14731,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
-	exports.push([module.id, "#player-data{\n\tbackground-color: rgba(255,255,255,0.8);\n    height: 50px;\n    border-radius: 5px;\n    padding: 25px 1em;\n    float: left;\n    margin:0 10px;\n}\n#player-data div {\n\tdisplay: inline-block;\n\tpadding: 0 0.5em;\n}\n#player-data div p {\n\tborder-top: 1px solid black;\n\twidth: 32px;\n\tmargin: 0;\n\tpadding-top: 5px;\n\ttext-align: center;\n}", ""]);
+	exports.push([module.id, "#player-data{\n\tbackground-color: rgba(255,255,255,0.8);\n    height: 100%;\n    border-radius: 5px;\n    margin:0 10px 0 0;\n}\n#player-data div {\n\tdisplay: inline-block;\n\tpadding: 5px 0.5em;\n\tborder-left: 1px solid black;\n\tfloat: left;\n}\n#player-data div:first-child {\n\tborder-left: none;\n}\n#player-data div * {\n\tmargin: 3px auto;\n}\n#player-data div p {\n\tborder-top: 1px solid black;\n\twidth: 32px;\n\tpadding-top: 5px;\n\ttext-align: center;\n}\n#player-data div svg {\n\tdisplay: block;\n}\n#player-data div p.winner {\n\tfont-size: 8pt;\n\tborder-top: none;\n\tpadding: 0;\n}\n#player-data div.winner {\n\tbackground-color: inherit;\n\tmargin-top: -213px;\n}", ""]);
 
 /***/ },
 /* 104 */
@@ -15181,9 +15181,11 @@
 	            )                    
 	    },
 	    playerTileDeselect: function() {
+	        if ( this.state.gameOver ) return;
 	        this.setState({selectedTile: null, gameMessage: ""});
 	    },
 	    playerTileSelect: function(tileComponent) {
+	        if ( this.state.gameOver ) return;
 	        if (!this.state.exchangeTiles) {
 	            // handling for tile placement mode
 	            if (this.state.selectedTile !== tileComponent) {
@@ -15205,14 +15207,17 @@
 
 	    },
 	    playableCoordClick: function(playableCoord) {
-	        var game = this.state.game;
+	        if ( this.state.gameOver ) return;
 	        if (!this.state.selectedTile) return;
+	        
+	        var game = this.state.game;
 	        var success = game.getCurrentPlayer().selectTile(game, this.state.selectedTile.props.tile).placeSelectedTile(game, playableCoord.props.coords);
 	        if (success) {
 	            this.setState({game: app.game, selectedTile: null, gameMessage: "Tile placed"});
 	        }
 	    },
 	    handleEndTurn: function() {
+	        if ( this.state.gameOver ) return;
 	        var game = this.state.game;
 	        var success = game.getCurrentPlayer().endTurn(game);
 	        if (!success) {
@@ -15226,6 +15231,7 @@
 	        
 	    },
 	    handleExchange: function() {
+	        if ( this.state.gameOver ) return;
 	        if (this.state.exchangeTiles) {
 	            if (!this.state.exchangeTiles.length) {
 	                this.setState({exchangeTiles: null, gameMessage: "Exchange cancelled."});
@@ -15252,6 +15258,7 @@
 	        }
 	    },
 	    handleTurnReset: function() {
+	        if ( this.state.gameOver ) return;
 	        this.state.game.resetTurn();
 	        this.state.game.getCurrentPlayer().selectedTiles = [];
 	        this.setState({
@@ -15261,10 +15268,11 @@
 	                    gameMessage: "Turn reset"});
 	    },
 	    playerTileDragStart: function(tile) {
+	        if ( this.state.gameOver ) return;
 	        if (this.state.selectedTile !== tile) this.playerTileSelect(tile);
 	    },
 	    playerTileDragEnd: function() {
-
+	        if ( this.state.gameOver ) return;
 	        if (this.over) {
 	            this.playableCoordClick(this.over);
 	            this.over = null;
@@ -15272,12 +15280,14 @@
 	        this.setState({selectedTile: null, gameMessage: ""});
 	    },        
 	    playableCoordDragEnter: function(playableCoord, e) {
+	        if ( this.state.gameOver ) return;
 	        if (this.state.game.board.placeTileValidate(playableCoord.props.coords, this.state.selectedTile.props.tile)) {
 	            this.over = playableCoord;
 	            playableCoord.getDOMNode().classList.add("play-validated");
 	        }
 	    },
 	    playableCoordDragLeave: function(playableCoord, e) {
+	        if ( this.state.gameOver ) return;
 	        if (playableCoord === this.over) this.over = null;
 	        playableCoord.getDOMNode().classList.remove("play-validated");
 	    },
@@ -15650,22 +15660,70 @@
 	var PlayerData = React.createClass({displayName: 'PlayerData',
 	        render: function () {
 	        var fill = this.props.active ? "green" : "black";
-	        var svg = this.props.player.type ? (
+	        var playerSVG = this.props.player.type ? (
 	                React.DOM.svg({height: "32", width: "32", fill: fill}, 
-	                    React.DOM.polygon({points: "0,30 4,22 28,22 32,30  "}), 
-	                    React.DOM.path({d: "M4,2v18h24V2H4z M26,18H6V4h20V18z"})
+	                    React.DOM.g({transform: "scale(1, .825)"}, 
+	                        React.DOM.polygon({points: "0,30 4,22 28,22 32,30"}), 
+	                        React.DOM.path({d: "M4,2v18h24V2H4z M26,18H6V4h20V18z"})
+	                    )
 	                )
 	            ) : (
 	                React.DOM.svg({height: "32px", width: "32px", fill: fill}, 
-	                    React.DOM.path({d: "M0,32h32v-8c0,0,0-4-4-4c-2,0-20,0-24,0s-4,4-4,4V32z"}), 
-	                    React.DOM.circle({cx: "16", cy: "10", r: "8"})
+	                    React.DOM.g({transform: "scale(1, .825)"}, 
+	                        React.DOM.path({d: "M0,32h32v-8c0,0,0-4-4-4c-2,0-20,0-24,0s-4,4-4,4V32z"}), 
+	                        React.DOM.circle({cx: "16", cy: "10", r: "8"})
+	                    )
 	                )
-	            )
+	            );
+
+	        var tiles = this.props.player.tiles.map(function(tile, i) {
+	            var y = i < 3 ? 0 : 10;
+	            var x = i < 3 ? i * 10 : (i - 3) * 10;
+	            return (
+	                React.DOM.rect({
+	                    width: "8", 
+	                    height: "8", 
+	                    x: x, 
+	                    y: y, 
+	                    fill: "black", 
+	                    stroke: "none"})
+	            );
+	        });
+
+	        var tileCounters = (
+	                React.DOM.a({title: tiles.length + ' tiles remaining'}, 
+	                    React.DOM.svg({
+	                        version: "1.1", 
+	                        className: "tile-counters", 
+	                        height: "18", 
+	                        width: "30"}, 
+	                        tiles
+	                    )
+	                )
+	            );
+	        var winners = this.props.winners;
+	        var winner = this.props.winner ? (
+	                React.DOM.svg({
+	                    version: "1.1", 
+	                    height: "210", 
+	                    width: "50"}, 
+	                    React.DOM.text({
+	                        x: "0", 
+	                        y: "0", 
+	                        transform: "rotate(90)", 
+	                        fontSize: "50"}, 
+	                        "WINNER"
+	                    )
+
+	                )
+	            ) : null;
 	        return (
-	            React.DOM.div(null, 
-	                svg, 
+	            React.DOM.div({className: this.props.winner ? "winner" : ""}, 
+
+	                winner, 
+	                playerSVG, 
 	                React.DOM.p(null, this.props.player.score), 
-	                this.props.winner ? (React.DOM.p(null, "WINNER")) : null
+	                tileCounters
 	            )
 	        );
 	    }
@@ -31073,93 +31131,6 @@
 
 	    }
 
-	    state.computerPlay = function(avoid_twerqle_bait) {
-
-	        var outer = this;
-	        var plyr = this.getCurrentPlayer();
-
-	        if (this.isInitialState()) {
-	            var coords, move = [];
-	            var line = plyr.getLongestLine(this);
-	            for (var i = 0; i < line.length; i++) {
-	                coords = new Board.Coordinates(0, i);
-	                move.push(new Board.TilePlacement(coords, line[i]));
-	            };
-	            return ['play', move];
-	        }
-
-	        var lines = plyr.getAllLinesInRack(this);
-
-	        var scores = {};
-	        var killswitch = false;
-	        function recurse_optimize_score(rack, avoid_twerqle_bait) {
-	            var row, col, tile;
-	            var playables = outer.playable();
-	            for (var i = 0; i < playables.length; i++) {
-
-	                for (var j = rack.length - 1; j >= 0; j--) {
-
-	                    tile = rack[j];
-	                    if (outer.tilePlace(playables[i], tile)) {
-	                        recurse_optimize_score(rack.slice(0,j).concat(rack.slice(j + 1)), avoid_twerqle_bait);
-	                        if (killswitch) {
-	                            outer.turnHistory = [];
-	                            return;
-	                        }
-	                    }
-	                };
-	            };
-	            if (outer.turnHistory.length) {
-	                var hash = JSON.stringify(outer.turnHistory);
-	                var score = outer.scoreTurn();
-	                var score_value = avoid_twerqle_bait && 
-	                                    outer.moveLines().filter(function(line) { return line.length === outer.numTypes - 1; }).length ? score - 2 : score;
-	                scores[hash] = score_value;
-	                outer.undoTilePlace();
-
-	                if (score > numTypes * 2 + 1) killswitch = true;
-	            }
-	        }
-
-	        for (var i = lines.length - 1; i >= 0; i--) {
-	            recurse_optimize_score(lines[i], avoid_twerqle_bait);
-	            this.resetTurn();
-	        };
-
-	        var highest = 0; 
-	        var options = []; 
-	        for (move in scores) {
-	            if (scores[move] > highest) {
-	                highest = scores[move];
-	                options = [move];
-	            } else if (scores[move] === highest) {
-	                options.push(move);
-	            }
-	        }
-
-	        if (highest) {
-	            var index = Math.floor(Math.random() * options.length);
-	            var movesJSON = JSON.parse(options[index]);
-	            var moves = [];
-	            for (var i = 0; i < movesJSON.length; i++) {
-	                moves.push(new Board.TilePlacement(
-	                                new Board.Coordinates(movesJSON[i].coords.x, movesJSON[i].coords.y), 
-	                                movesJSON[i].tile)
-	                            );
-	            };
-
-	            return ["play", moves];
-
-	        } else {
-	            var longestLine = plyr.getLongestLine(this);
-	            var rack = plyr.tiles.slice(0);
-	            for (var i = 0; i < longestLine.length; i++) {
-	                rack.splice(rack.indexOf(longestLine[i]), 1);
-	            };
-
-	            return ["exchange", rack];
-	        }
-	    }
 
 	    state.toJSON = function() {
 	        var ret = {};
