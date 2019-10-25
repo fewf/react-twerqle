@@ -1,0 +1,20 @@
+{
+    "background_color": "purple",
+    "description": "Twerqle!.",
+    "display": "fullscreen",
+    "icons": [
+        {
+          "src": "images/orange-plus.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "images/orange-plus-large.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+    ],
+    "name": "Twerqle",
+    "short_name": "Twerqle",
+    "start_url": "index.html"
+  }
